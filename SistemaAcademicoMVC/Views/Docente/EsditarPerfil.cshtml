@@ -1,0 +1,38 @@
+﻿@model SistemaAcademicoMVC.Models.Docente
+
+@{
+    ViewBag.Title = "Editar perfil";
+}
+
+/*
+    Vista para que el docente edite solo su propio perfil.
+    - Los campos están llenados con los datos del usuario autenticado.
+    - Permite modificar nombre y correo.
+    - Agrega validación y resumen de errores.
+*/
+
+<h2>Editar mi perfil</h2>
+
+@using (Html.BeginForm("EditarPerfil", "Docentes", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Nombre)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Correo)
+        @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Correo)
+    </div>
+    <!-- Si quieres permitir cambio de contraseña, agrega aquí el campo y la lógica -->
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+    </div>
+}

@@ -1,0 +1,24 @@
+﻿@model SistemaAcademicoMVC.Models.Docente
+
+<h2>Registro de Docente</h2>
+@using (Html.BeginForm("Register", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div>
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre)
+        @Html.ValidationMessageFor(m => m.Nombre)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Correo)
+        @Html.TextBoxFor(m => m.Correo)
+        @Html.ValidationMessageFor(m => m.Correo)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password)
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+    <button type="submit">Registrar</button>
+    @Html.ValidationSummary(true)
+}

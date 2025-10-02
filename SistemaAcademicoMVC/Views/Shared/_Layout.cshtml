@@ -1,0 +1,114 @@
+﻿@*
+    Layout principal con spinner robusto, menú dinámico y mensaje de bienvenida.
+*@
+@{
+    var docenteNombre = Session["DocenteNombre"] as string;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Sistema Académico MVC</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        #loading-spinner {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255,255,255,0.7);
+            text-align: center;
+        }
+
+            #loading-spinner img {
+                margin-top: 20vh;
+                width: 60px;
+                height: 60px;
+            }
+
+            #loading-spinner div {
+                font-size: 1.2em;
+                color: #333;
+                margin-top: 10px;
+            }
+    </style>
+</head>
+<body>
+    <!-- Spinner de carga -->
+    <div id="loading-spinner">
+        <img src="@Url.Content("~/Content/spinner.gif")" alt="Cargando..." />
+        <div>Cargando información...</div>
+    </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Sistema Académico MVC", "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Estudiantes", "Index", "Estudiantes")</li>
+                    <li>@Html.ActionLink("Docentes", "Index", "Docentes")</li>
+                    <li>@Html.ActionLink("Cursos", "Index", "Cursos")</li>
+                    <li>@Html.ActionLink("Cuatrimestres", "Index", "Cuatrimestres")</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (docenteNombre != null)
+                    {
+                        <li class="navbar-text">Bienvenido, @docenteNombre</li>
+                        <li>@Html.ActionLink("Panel", "Panel", "Docentes")</li>
+                        <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                        <li>@Html.ActionLink("Registro", "Register", "Account")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content" style="margin-top:60px;">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Sistema Académico MVC | Desarrollado por Harold Cruz</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script>
+        // Spinner robusto: navegación y formularios
+        $(document).on('submit', 'form', function () {
+            $('#loading-spinner').show();
+        });
+        $(document).on('click', 'a', function (e) {
+            var href = $(this).attr('href');
+            if (href && href !== '#' && !$(this).attr('target')) {
+                $('#loading-spinner').show();
+            }
+        });
+        $(window).on('load', function () {
+            $('#loading-spinner').hide();
+        });
+        // Para AJAX (si usas llamadas AJAX en algún controlador/vista)
+        $(document).ajaxStart(function () {
+            $('#loading-spinner').show();
+        });
+        $(document).ajaxStop(function () {
+            $('#loading-spinner').hide();
+        });
+    </script>
+</body>
+</html> 

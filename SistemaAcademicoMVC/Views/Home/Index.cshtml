@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+    // Recupera el estado de autenticación del docente
+    var docenteId = Session["DocenteId"];
+}
+
+<div class="jumbotron">
+    <h1>Sistema Académico MVC</h1>
+    <p class="lead">
+        Bienvenido al Sistema Académico MVC.<br />
+        Aquí puedes gestionar estudiantes, docentes, cursos y cuatrimestres de manera eficiente y segura.
+    </p>
+    <p>
+        <!-- Enlace público para consultar estudiantes -->
+        @Html.ActionLink("Ir a Estudiantes", "Index", "Estudiantes", null, new { @class = "btn btn-primary btn-lg" })
+        <!-- Enlace protegido: solo aparece si el docente está autenticado -->
+        @if (docenteId != null)
+        {
+            @Html.ActionLink("Panel de Estudiantes", "Panel", "Estudiantes", null, new { @class = "btn btn-info btn-lg" })
+        }
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Gestión de Estudiantes</h2>
+        <p>Consulta, registra, edita y elimina estudiantes fácilmente.</p>
+        <p>
+            <!-- Enlace público para ver estudiantes -->
+            @Html.ActionLink("Ver Estudiantes", "Index", "Estudiantes", null, new { @class = "btn btn-default" })
+            <!-- Enlace protegido para el panel de gestión de estudiantes -->
+            @if (docenteId != null)
+            {
+                @Html.ActionLink("Panel de Estudiantes", "Panel", "Estudiantes", null, new { @class = "btn btn-info" })
+            }
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Gestión de Docentes</h2>
+        <p>Administra los docentes, sus datos y credenciales.</p>
+        <p>
+            <!-- Enlace público para ver docentes -->
+            @Html.ActionLink("Ver Docentes", "Index", "Docentes", null, new { @class = "btn btn-default" })
+            <!-- Enlace protegido para el panel de gestión de docentes -->
+            @if (docenteId != null)
+            {
+                @Html.ActionLink("Panel de Docentes", "Panel", "Docentes", null, new { @class = "btn btn-info" })
+            }
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Gestión de Cursos</h2>
+        <p>Crea y edita cursos, asócialos a cuatrimestres y estudiantes.</p>
+        <p>
+            <!-- Enlace público para ver cursos -->
+            @Html.ActionLink("Ver Cursos", "Index", "Cursos", null, new { @class = "btn btn-default" })
+            <!-- Enlace protegido para el panel de gestión de cursos -->
+            @if (docenteId != null)
+            {
+                @Html.ActionLink("Panel de Cursos", "Panel", "Cursos", null, new { @class = "btn btn-info" })
+            }
+        </p>
+    </div>
+</div>

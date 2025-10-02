@@ -1,0 +1,73 @@
+﻿@model SistemaAcademicoMVC.Models.Estudiante
+
+@{
+    ViewBag.Title = "Detalles del Estudiante";
+}
+
+<!--
+    Vista Details: Muestra la información detallada de un estudiante.
+    Permite volver a la lista, editar o eliminar el registro.
+-->
+
+<h2>Detalles del Estudiante</h2>
+
+<div>
+    <h4>Estudiante</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Apellidos)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Apellidos)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Identificacion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Identificacion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaNacimiento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaNacimiento)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Provincia)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Provincia)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Canton)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Canton)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Distrito)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Distrito)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Correo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Correo)
+        </dd>
+    </dl>
+</div>
+<p>
+    <!-- Enlaces para editar, eliminar o volver a la lista principal -->
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Eliminar", "Delete", new { id = Model.Id }) |
+    @Html.ActionLink("Regresar a la Lista", "Index")
+</p>
