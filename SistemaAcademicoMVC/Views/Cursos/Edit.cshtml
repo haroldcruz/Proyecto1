@@ -1,0 +1,80 @@
+﻿@model SistemaAcademicoMVC.Models.CursoViewModel
+
+@{
+    // Título de la página
+    ViewBag.Title = "Editar Curso";
+}
+
+<h2>Editar Curso</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    // Campo: Nombre del curso
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", autocomplete = "off", id = "nombreCurso" })
+        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" }) 
+    </div>
+
+    // Campo: Código del curso
+    <div class="form-group">
+        @Html.LabelFor(m => m.Codigo)
+        @Html.TextBoxFor(m => m.Codigo, new { @class = "form-control", autocomplete = "off", id = "codigoCurso" })
+        @Html.ValidationMessageFor(m => m.Codigo, "", new { @class = "text-danger" }) 
+    </div>
+
+    // Campo: Créditos del curso
+    <div class="form-group">
+        @Html.LabelFor(m => m.Creditos)
+        @Html.TextBoxFor(m => m.Creditos, new { @class = "form-control", type = "number", min = "1", max = "20", autocomplete = "off", id = "creditosCurso" })
+        @Html.ValidationMessageFor(m => m.Creditos, "", new { @class = "text-danger" }) 
+    </div>
+
+    // Campo oculto para el Id del curso
+    <input type="hidden" name="id" value="@ViewBag.CursoId" />
+
+    // Botón para guardar cambios y enlace para volver a la lista
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default" })
+}
+
+<script>
+    // Oculta los mensajes de error debajo de los campos después de 4 segundos
+    setTimeout(function () {
+        var elementos = document.getElementsByClassName('text-danger');
+        for (var i = 0; i < elementos.length; i++) {
+            elementos[i].style.display = 'none';
+        }
+    }, 4000);
+
+    // Persistencia de datos de formulario usando localStorage
+    window.onload = function () {
+        if (localStorage.getItem("nombreCurso")) {
+            document.getElementById("nombreCurso").value = localStorage.getItem("nombreCurso");
+        }
+        if (localStorage.getItem("codigoCurso")) {
+            document.getElementById("codigoCurso").value = localStorage.getItem("codigoCurso");
+        }
+        if (localStorage.getItem("creditosCurso")) {
+            document.getElementById("creditosCurso").value = localStorage.getItem("creditosCurso");
+        }
+    };
+
+    document.getElementById("nombreCurso").addEventListener("input", function () {
+        localStorage.setItem("nombreCurso", this.value);
+    });
+    document.getElementById("codigoCurso").addEventListener("input", function () {
+        localStorage.setItem("codigoCurso", this.value);
+    });
+    document.getElementById("creditosCurso").addEventListener("input", function () {
+        localStorage.setItem("creditosCurso", this.value);
+    });
+
+    document.querySelector("form").addEventListener("submit", function () {
+        localStorage.removeItem("nombreCurso");
+        localStorage.removeItem("codigoCurso");
+        localStorage.removeItem("creditosCurso");
+    });
+</script>

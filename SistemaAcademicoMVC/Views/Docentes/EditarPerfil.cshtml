@@ -1,0 +1,25 @@
+﻿@model SistemaAcademicoMVC.Models.Docente
+
+<!-- Vista para editar el perfil del docente logueado -->
+<h2>Editar Perfil</h2>
+@using (Html.BeginForm("EditarPerfil", "Docentes", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Correo)
+        @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <button type="submit" class="btn btn-success">Guardar cambios</button>
+}

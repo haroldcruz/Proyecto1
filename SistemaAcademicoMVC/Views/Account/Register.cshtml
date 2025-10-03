@@ -1,24 +1,49 @@
 ﻿@model SistemaAcademicoMVC.Models.Docente
 
+@{
+    // Vista de registro de docentes. Muestra mensajes de error y validación.
+}
+
 <h2>Registro de Docente</h2>
+
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    <div>
+
+    // Campo: Nombre del docente
+    <div class="form-group">
         @Html.LabelFor(m => m.Nombre)
-        @Html.TextBoxFor(m => m.Nombre)
-        @Html.ValidationMessageFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" }) 
     </div>
-    <div>
+
+    // Campo: Correo del docente
+    <div class="form-group">
         @Html.LabelFor(m => m.Correo)
-        @Html.TextBoxFor(m => m.Correo)
-        @Html.ValidationMessageFor(m => m.Correo)
+        @Html.TextBoxFor(m => m.Correo, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" }) 
     </div>
-    <div>
+
+    // Campo: Contraseña del docente
+    <div class="form-group">
         @Html.LabelFor(m => m.Password)
-        @Html.PasswordFor(m => m.Password)
-        @Html.ValidationMessageFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" }) 
     </div>
-    <button type="submit">Registrar</button>
-    @Html.ValidationSummary(true)
+
+    // Mensajes de error generales
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    // Botón para registrar docente
+    <button type="submit" class="btn btn-success">Registrar</button>
 }
+
+<script>
+    // Oculta los mensajes de error (ValidationMessageFor y ValidationSummary) después de 4 segundos
+    setTimeout(function () {
+        var errores = document.getElementsByClassName('text-danger');
+        for (var i = 0; i < errores.length; i++) {
+            errores[i].style.display = 'none';
+        }
+    }, 4000);
+</script>

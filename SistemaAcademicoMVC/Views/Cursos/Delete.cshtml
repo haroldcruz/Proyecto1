@@ -1,0 +1,29 @@
+﻿@model SistemaAcademicoMVC.Models.Curso
+
+@{
+    ViewBag.Title = "Eliminar Curso";
+}
+
+<h2>Eliminar Curso</h2>
+
+<div class="alert alert-danger">
+    <strong>¿Estás seguro que deseas eliminar este curso?</strong>
+</div>
+
+<dl class="dl-horizontal">
+    <dt>Nombre</dt>
+    <dd>@Model.Nombre</dd>
+    <dt>Código</dt>
+    <dd>@Model.Codigo</dd>
+    <dt>Créditos</dt>
+    <dd>@Model.Creditos</dd>
+    <dt>Correo Docente</dt>
+    <dd>@Model.CorreoDocente</dd>
+</dl>
+
+@using (Html.BeginForm("Delete", "Cursos", new { id = Model.Id }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+}

@@ -128,7 +128,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\DocenteController.cs" />
+    <Compile Include="Controllers\CursosController.cs" />
+    <Compile Include="Controllers\DocentesController.cs" />
     <Compile Include="Controllers\EstudiantesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -142,9 +143,14 @@
     <Compile Include="Migrations\202510020305465_SyncModels.designer.cs">
       <DependentUpon>202510020305465_SyncModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202510030117313_AddCorreoDocenteToCurso.cs" />
+    <Compile Include="Migrations\202510030117313_AddCorreoDocenteToCurso.designer.cs">
+      <DependentUpon>202510030117313_AddCorreoDocenteToCurso.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Curso.cs" />
     <Compile Include="Models\CursoPorCuatrimestre.cs" />
+    <Compile Include="Models\CursoViewModel.cs" />
     <Compile Include="Models\Docente.cs" />
     <Compile Include="Models\Estudiante.cs" />
     <Compile Include="Models\Cuatrimestre.cs" />
@@ -199,7 +205,11 @@
     <Content Include="Views\Estudiantes\Delete.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Docente\EsditarPerfil.cshtml" />
+    <Content Include="Views\Docentes\EditarPerfil.cshtml" />
+    <Content Include="Views\Cursos\Create.cshtml" />
+    <Content Include="Views\Cursos\Index.cshtml" />
+    <Content Include="Views\Cursos\Edit.cshtml" />
+    <Content Include="Views\Cursos\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -223,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202510020305465_SyncModels.resx">
       <DependentUpon>202510020305465_SyncModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510030117313_AddCorreoDocenteToCurso.resx">
+      <DependentUpon>202510030117313_AddCorreoDocenteToCurso.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

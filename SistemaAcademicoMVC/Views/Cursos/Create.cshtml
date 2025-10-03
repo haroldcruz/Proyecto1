@@ -1,0 +1,85 @@
+﻿@model SistemaAcademicoMVC.Models.CursoViewModel
+
+@{
+    // Título de la página
+    ViewBag.Title = "Registrar Curso";
+}
+
+<h2>Registrar Curso</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    // Campo: Nombre del curso
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", autocomplete = "off", id = "nombreCurso" })
+        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+    </div>
+
+    // Campo: Código del curso
+    <div class="form-group">
+        @Html.LabelFor(m => m.Codigo)
+        @Html.TextBoxFor(m => m.Codigo, new { @class = "form-control", autocomplete = "off", id = "codigoCurso" })
+        @Html.ValidationMessageFor(m => m.Codigo, "", new { @class = "text-danger" }) 
+    </div>
+
+    // Campo: Créditos del curso
+    <div class="form-group">
+        @Html.LabelFor(m => m.Creditos)
+        @Html.TextBoxFor(m => m.Creditos, new { @class = "form-control", type = "number", min = "1", max = "20", autocomplete = "off", id = "creditosCurso" })
+        @Html.ValidationMessageFor(m => m.Creditos, "", new { @class = "text-danger" })
+    </div>
+
+    // Botón para registrar el curso
+    <button type="submit" class="btn btn-primary">Registrar Curso</button>
+}
+
+<script>
+    // Persistencia de datos de formulario usando localStorage
+
+    // Al cargar la página, rellena los campos si hay datos en localStorage
+    window.onload = function () {
+        if (localStorage.getItem("nombreCurso")) {
+            document.getElementById("nombreCurso").value = localStorage.getItem("nombreCurso");
+        }
+        if (localStorage.getItem("codigoCurso")) {
+            document.getElementById("codigoCurso").value = localStorage.getItem("codigoCurso");
+        }
+        if (localStorage.getItem("creditosCurso")) {
+            document.getElementById("creditosCurso").value = localStorage.getItem("creditosCurso");
+        }
+
+        // Oculta los mensajes de error debajo de los campos después de 4 segundos
+        setTimeout(function () {
+            var elementos = document.getElementsByClassName('text-danger');
+            for (var i = 0; i < elementos.length; i++) {
+                elementos[i].style.display = 'none';
+            }
+        }, 4000);
+    };
+
+    // Guarda cada cambio en localStorage
+    document.getElementById("nombreCurso").addEventListener("input", function () {
+        localStorage.setItem("nombreCurso", this.value);
+    });
+    document.getElementById("codigoCurso").addEventListener("input", function () {
+        localStorage.setItem("codigoCurso", this.value);
+    });
+    document.getElementById("creditosCurso").addEventListener("input", function () {
+        localStorage.setItem("creditosCurso", this.value);
+    });
+
+    // Limpia localStorage al enviar el formulario
+    document.querySelector("form").addEventListener("submit", function () {
+        localStorage.removeItem("nombreCurso");
+        localStorage.removeItem("codigoCurso");
+        localStorage.removeItem("creditosCurso");
+    });
+</script>

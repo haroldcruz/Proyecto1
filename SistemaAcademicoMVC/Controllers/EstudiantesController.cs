@@ -16,69 +16,128 @@ namespace SistemaAcademicoMVC.Controllers
         // Instancia del contexto de base de datos para interactuar con los modelos.
         private SistemaAcademicoMVCContext db = new SistemaAcademicoMVCContext();
 
-        /// <summary>
-        /// Acción que muestra la lista de todos los estudiantes registrados.
-        /// </summary>
         public ActionResult Index()
         {
             if (Session["DocenteId"] == null)
                 return RedirectToAction("Login", "Account");
-            // Código para mostrar estudiantes
-            return View();
+
+            var lista = db.Estudiantes.ToList();
+            return View(lista);
         }
 
-        /// <summary>
-        /// Acción que muestra los detalles de un estudiante específico.
-        /// </summary>
-        /// <param name="id">Identificador del estudiante</param>
         public ActionResult Details(int? id)
         {
-            // Validación básica del parámetro
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            // Busca el estudiante por ID
             Estudiante estudiante = db.Estudiantes.Find(id);
 
             if (estudiante == null)
                 return HttpNotFound();
+
+            // Carga los cursos matriculados por el estudiante para mostrar en la vista
+            var matriculas = db.Matriculas
+                .Include(m => m.Curso)
+                .Include(m => m.Cuatrimestre)
+                .Where(m => m.EstudianteId == id)
+                .ToList();
+            ViewBag.CursosMatriculados = matriculas;
 
             return View(estudiante);
         }
 
         /// <summary>
         /// Acción GET para mostrar el formulario de registro de estudiante.
+        /// Muestra solo los cursos que pertenecen al docente autenticado.
         /// </summary>
         public ActionResult Create()
         {
+            if (Session["DocenteId"] == null)
+                return RedirectToAction("Login", "Account");
+
+            // Obtener el correo del docente autenticado
+            string correoDocente = Session["DocenteCorreo"]?.ToString();
+
+            // Cuatrimestres disponibles
+            ViewBag.Cuatrimestres = db.Cuatrimestres
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Año + " - " + c.Numero
+                }).ToList();
+
+            // Solo los cursos del docente autenticado
+            ViewBag.CursosSeleccionados = db.Cursos
+                .Where(c => c.CorreoDocente == correoDocente)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Nombre
+                }).ToList();
+
             return View();
         }
 
         /// <summary>
-        /// Acción POST para registrar un nuevo estudiante en la base de datos.
+        /// Acción POST para registrar un nuevo estudiante.
         /// </summary>
-        /// <param name="estudiante">Objeto estudiante recibido del formulario</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Apellidos,Identificacion,FechaNacimiento,Provincia,Canton,Distrito,Correo")] Estudiante estudiante)
+        public ActionResult Create(Estudiante estudiante, int CuatrimestreId, int[] CursosSeleccionados)
         {
+            if (Session["DocenteId"] == null)
+                return RedirectToAction("Login", "Account");
+
             if (ModelState.IsValid)
             {
                 db.Estudiantes.Add(estudiante);
                 db.SaveChanges();
+
+                // Matricular en los cursos seleccionados
+                if (CursosSeleccionados != null)
+                {
+                    foreach (var cursoId in CursosSeleccionados)
+                    {
+                        var matricula = new Matricula
+                        {
+                            EstudianteId = estudiante.Id,
+                            CursoId = cursoId,
+                            CuatrimestreId = CuatrimestreId
+                        };
+                        db.Matriculas.Add(matricula);
+                    }
+                    db.SaveChanges();
+                }
+
                 return RedirectToAction("Index");
             }
 
-            // Si hay errores de validación, vuelve al formulario
+            // Recarga combos en caso de error
+            string correoDocente = Session["DocenteCorreo"]?.ToString();
+
+            ViewBag.Cuatrimestres = db.Cuatrimestres
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Año + " - " + c.Numero
+                }).ToList();
+
+            ViewBag.CursosSeleccionados = db.Cursos
+                .Where(c => c.CorreoDocente == correoDocente)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Nombre
+                }).ToList();
+
             return View(estudiante);
         }
 
-        /// <summary>
-        /// Acción GET para mostrar el formulario de edición de un estudiante existente.
-        /// </summary>
-        /// <param name="id">Identificador del estudiante</param>
         public ActionResult Edit(int? id)
         {
+            if (Session["DocenteId"] == null)
+                return RedirectToAction("Login", "Account");
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -89,29 +148,60 @@ namespace SistemaAcademicoMVC.Controllers
             return View(estudiante);
         }
 
-        /// <summary>
-        /// Acción POST para guardar los cambios de edición de un estudiante.
-        /// </summary>
-        /// <param name="estudiante">Objeto estudiante modificado</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Nombre,Apellidos,Identificacion,FechaNacimiento,Provincia,Canton,Distrito,Correo")] Estudiante estudiante)
         {
+            if (Session["DocenteId"] == null)
+                return RedirectToAction("Login", "Account");
+
+            // Validaciones personalizadas
+            if (string.IsNullOrWhiteSpace(estudiante.Nombre))
+                ModelState.AddModelError("Nombre", "El nombre es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Apellidos))
+                ModelState.AddModelError("Apellidos", "Los apellidos son obligatorios.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Identificacion))
+                ModelState.AddModelError("Identificacion", "La identificación es obligatoria.");
+            else if (db.Estudiantes.Any(e => e.Identificacion == estudiante.Identificacion && e.Id != estudiante.Id))
+                ModelState.AddModelError("Identificacion", "Ya existe otro estudiante con esa identificación.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Correo))
+                ModelState.AddModelError("Correo", "El correo es obligatorio.");
+            else if (!estudiante.Correo.Contains("@") || !estudiante.Correo.Contains("."))
+                ModelState.AddModelError("Correo", "El correo no tiene un formato válido.");
+            else if (db.Estudiantes.Any(e => e.Correo == estudiante.Correo && e.Id != estudiante.Id))
+                ModelState.AddModelError("Correo", "Ya existe otro estudiante con ese correo.");
+
+            if (estudiante.FechaNacimiento == null)
+                ModelState.AddModelError("FechaNacimiento", "La fecha de nacimiento es obligatoria.");
+            else if (estudiante.FechaNacimiento > DateTime.Today)
+                ModelState.AddModelError("FechaNacimiento", "La fecha de nacimiento no puede ser mayor a hoy.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Provincia))
+                ModelState.AddModelError("Provincia", "La provincia es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Canton))
+                ModelState.AddModelError("Canton", "El cantón es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Distrito))
+                ModelState.AddModelError("Distrito", "El distrito es obligatorio.");
+
             if (ModelState.IsValid)
             {
-                db.Entry(estudiante).State = EntityState.Modified;
+                db.Entry(estudiante).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(estudiante);
         }
 
-        /// <summary>
-        /// Acción GET para mostrar la confirmación de eliminación de un estudiante.
-        /// </summary>
-        /// <param name="id">Identificador del estudiante</param>
         public ActionResult Delete(int? id)
         {
+            if (Session["DocenteId"] == null)
+                return RedirectToAction("Login", "Account");
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -122,24 +212,19 @@ namespace SistemaAcademicoMVC.Controllers
             return View(estudiante);
         }
 
-        /// <summary>
-        /// Acción POST para eliminar el estudiante de la base de datos.
-        /// </summary>
-        /// <param name="id">Identificador del estudiante</param>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (Session["DocenteId"] == null)
+                return RedirectToAction("Login", "Account");
+
             Estudiante estudiante = db.Estudiantes.Find(id);
             db.Estudiantes.Remove(estudiante);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Libera los recursos del contexto de base de datos cuando el controlador se destruye.
-        /// </summary>
-        /// <param name="disposing">Indica si se están liberando recursos administrados</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

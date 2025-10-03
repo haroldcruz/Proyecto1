@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SistemaAcademicoMVC.Models.Curso>
+
+@{
+    ViewBag.Title = "Mis Cursos";
+}
+
+<h2>Mis Cursos</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<p>
+    @Html.ActionLink("Registrar Nuevo Curso", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Créditos</th>
+            <th>Correo Docente</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var curso in Model)
+        {
+            <tr>
+                <td>@curso.Nombre</td>
+                <td>@curso.Codigo</td>
+                <td>@curso.Creditos</td>
+                <td>@curso.CorreoDocente</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = curso.Id }, new { @class = "btn btn-warning btn-sm" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = curso.Id }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
