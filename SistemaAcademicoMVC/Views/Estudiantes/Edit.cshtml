@@ -12,107 +12,151 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Estudiante</h4>
-        <hr />
-        // Muestra los mensajes de error de validación general
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal">
+    <h4>Estudiante</h4>
+    <hr />
+    @* // Muestra los mensajes de error de validación general*@
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        // Campo oculto para el Id del estudiante
-        @Html.HiddenFor(model => model.Id)
+    @* // Campo oculto para el Id del estudiante*@
+    @Html.HiddenFor(model => model.Id)
 
-        // Campo: Nombre
-        <div class="form-group">
-            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" }) // Mensaje de error para Nombre
-            </div>
-        </div>
-
-        // Campo: Apellidos
-        <div class="form-group">
-            @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" }) // Mensaje de error para Apellidos
-            </div>
-        </div>
-
-        // Campo: Identificación
-        <div class="form-group">
-            @Html.LabelFor(model => model.Identificacion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Identificacion, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Identificacion, "", new { @class = "text-danger" }) // Mensaje de error para Identificación
-            </div>
-        </div>
-
-        // Campo: Fecha de Nacimiento
-        <div class="form-group">
-            @Html.LabelFor(model => model.FechaNacimiento, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FechaNacimiento, new { htmlAttributes = new { @class = "form-control", type = "date" } })
-                @Html.ValidationMessageFor(model => model.FechaNacimiento, "", new { @class = "text-danger" }) // Mensaje de error para FechaNacimiento
-            </div>
-        </div>
-
-        // Campo: Provincia
-        <div class="form-group">
-            @Html.LabelFor(model => model.Provincia, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Provincia, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Provincia, "", new { @class = "text-danger" }) // Mensaje de error para Provincia
-            </div>
-        </div>
-
-        // Campo: Cantón
-        <div class="form-group">
-            @Html.LabelFor(model => model.Canton, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Canton, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Canton, "", new { @class = "text-danger" }) // Mensaje de error para Cantón
-            </div>
-        </div>
-
-        // Campo: Distrito
-        <div class="form-group">
-            @Html.LabelFor(model => model.Distrito, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Distrito, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Distrito, "", new { @class = "text-danger" }) // Mensaje de error para Distrito
-            </div>
-        </div>
-
-        // Campo: Correo
-        <div class="form-group">
-            @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" }) // Mensaje de error para Correo
-            </div>
-        </div>
-
-        // Botón para guardar los cambios
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
-                @Html.ActionLink("Regresar a la Lista", "Index", null, new { @class = "btn btn-default" })
-            </div>
+    @* // Campo: Nombre*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    @* // Campo: Apellidos*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @* // Campo: Identificación*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Identificacion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Identificacion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Identificacion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @* // Campo: Fecha de Nacimiento*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaNacimiento, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.FechaNacimiento, new { htmlAttributes = new { @class = "form-control", type = "date", id = "FechaNacimiento" } })
+            @Html.ValidationMessageFor(model => model.FechaNacimiento, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*// Campo: Provincia*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Provincia, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Provincia, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Provincia, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*// Campo: Cantón*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Canton, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Canton, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Canton, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*// Campo: Distrito*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Distrito, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Distrito, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Distrito, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*// Campo: Correo*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @* // Botón para guardar los cambios*@
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+            @Html.ActionLink("Regresar a la Lista", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
 }
 
-<script>
-    // Oculta los mensajes de error después de 4 segundos
-    setTimeout(function () {
-        var errores = document.getElementsByClassName('text-danger');
-        for (var i = 0; i < errores.length; i++) {
-            errores[i].style.display = 'none';
-        }
-    }, 4000);
-</script>
+    <script>
+setTimeout(function () {
+    var errores = document.getElementsByClassName('text-danger');
+    for (var i = 0; i < errores.length; i++) {
+        errores[i].style.display = 'none';
+    }
+}, 4000);
 
+const camposEdit = [
+    "Nombre",
+    "Apellidos",
+    "Identificacion",
+    "FechaNacimiento",
+    "Provincia",
+    "Canton",
+    "Distrito",
+    "Correo"
+];
+
+// Todo en un solo window.onload
+window.onload = function () {
+    // Cargar la fecha si el campo está vacío
+    var fechaInput = document.getElementById("FechaNacimiento");
+    if (fechaInput && !fechaInput.value) {
+        fechaInput.value = "@Model.FechaNacimiento.ToString("yyyy-MM-dd")";
+    }
+    // Luego localStorage
+    camposEdit.forEach(function (campo) {
+        var input = document.getElementById(campo);
+        if (input && localStorage.getItem("edit_" + campo)) {
+            input.value = localStorage.getItem("edit_" + campo);
+        }
+    });
+};
+
+// Guardar cada cambio en localStorage
+camposEdit.forEach(function (campo) {
+    var input = document.getElementById(campo);
+    if (input) {
+        input.addEventListener("input", function () {
+            localStorage.setItem("edit_" + campo, this.value);
+        });
+    }
+});
+
+// Limpiar localStorage si la edición fue exitosa (redirección)
+window.addEventListener("beforeunload", function () {
+    if (window.location.pathname.endsWith("/Estudiantes/Index")) {
+        camposEdit.forEach(function (campo) {
+            localStorage.removeItem("edit_" + campo);
+        });
+    }
+});
+    </script>
 @section Scripts {
     // Incluye los scripts para validación del lado del cliente
     @Scripts.Render("~/bundles/jqueryval")

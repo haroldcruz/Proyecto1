@@ -147,6 +147,10 @@
     <Compile Include="Migrations\202510030117313_AddCorreoDocenteToCurso.designer.cs">
       <DependentUpon>202510030117313_AddCorreoDocenteToCurso.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202510040324591_AddLoginLockoutFieldsToDocente.cs" />
+    <Compile Include="Migrations\202510040324591_AddLoginLockoutFieldsToDocente.designer.cs">
+      <DependentUpon>202510040324591_AddLoginLockoutFieldsToDocente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Curso.cs" />
     <Compile Include="Models\CursoPorCuatrimestre.cs" />
@@ -161,6 +165,9 @@
     <Compile Include="Models\SistemaAcademicoMVCContext.cs" />
     <Compile Include="Models\Tarea.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\CaptchaHelper.cs" />
+    <Compile Include="Utils\LoginConfig.cs" />
+    <Compile Include="Utils\PasswordHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -173,6 +180,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="App_Data\loginConfig.json" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -211,9 +219,7 @@
     <Content Include="Views\Cursos\Edit.cshtml" />
     <Content Include="Views\Cursos\Delete.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -236,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202510030117313_AddCorreoDocenteToCurso.resx">
       <DependentUpon>202510030117313_AddCorreoDocenteToCurso.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510040324591_AddLoginLockoutFieldsToDocente.resx">
+      <DependentUpon>202510040324591_AddLoginLockoutFieldsToDocente.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -2,22 +2,50 @@
 
 <!-- Vista de ingreso de docentes. Muestra mensajes de error y validación. -->
 <h2>Ingreso de Docentes</h2>
+
 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-<div class="form-group">
-    @Html.LabelFor(m => m.Correo)
-    @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
-</div>
-<div class="form-group">
-    @Html.LabelFor(m => m.Password)
-    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-</div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Correo)
+        @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+    </div>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-<button type="submit" class="btn btn-primary">Ingresar</button>
+    <button type="submit" class="btn btn-primary">Ingresar</button>
 }
+
+@{
+    var showCaptcha = ViewBag.ShowCaptcha != null && (bool)ViewBag.ShowCaptcha;
+}
+
+@if (showCaptcha)
+{
+    <div class="form-group">
+        <label for="Captcha">Ingrese el código:</label>
+        <input type="text" name="Captcha" class="form-control" autocomplete="off" />
+        <img id="captcha-img" src="@Url.Action("GetCaptchaImage", "Account")" alt="Captcha" />
+        <button type="button" id="reload-captcha" class="btn btn-link">Recargar código</button>
+        @Html.ValidationMessage("Captcha", "", new { @class = "text-danger" })
+    </div>
+}
+
 <p>
-    ¿No tienes cuenta? <a href="@Url.Action(" Register", "Account" )">Registrar nuevo docente</a>
+    ¿No tienes cuenta? <a href="@Url.Action("Register", "Account")">Registrar nuevo docente</a>
 </p>
+
+<script type="text/javascript">
+    var reloadBtn = document.getElementById('reload-captcha');
+    if (reloadBtn) {
+        reloadBtn.onclick = function () {
+            var img = document.getElementById('captcha-img');
+            // Agrega un parámetro único para evitar el caché del navegador
+            img.src = '@Url.Action("GetCaptchaImage", "Account")' + '?t=' + new Date().getTime();
+        };
+    }
+</script>

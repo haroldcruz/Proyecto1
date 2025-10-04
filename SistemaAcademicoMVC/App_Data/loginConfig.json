@@ -1,0 +1,6 @@
+﻿{
+  "MaxFailedAttempts": 55,
+  "LockoutMinutes": 0,
+  "CaptchaAfterAttempts": 83,
+  "EnableCaptcha": true
+}

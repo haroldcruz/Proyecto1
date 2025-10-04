@@ -16,12 +16,34 @@ namespace SistemaAcademicoMVC.Controllers
         // Instancia del contexto de base de datos para interactuar con los modelos.
         private SistemaAcademicoMVCContext db = new SistemaAcademicoMVCContext();
 
+        /// <summary>
+        /// SOLO muestra los estudiantes matriculados en cursos del docente logueado.
+        /// </summary>
         public ActionResult Index()
         {
             if (Session["DocenteId"] == null)
                 return RedirectToAction("Login", "Account");
 
-            var lista = db.Estudiantes.ToList();
+            string correoDocente = Session["DocenteCorreo"]?.ToString();
+
+            // IDs de cursos impartidos por el docente actual
+            var cursosDocenteIds = db.Cursos
+                .Where(c => c.CorreoDocente == correoDocente)
+                .Select(c => c.Id)
+                .ToList();
+
+            // IDs de estudiantes matriculados en esos cursos
+            var estudiantesIds = db.Matriculas
+                .Where(m => cursosDocenteIds.Contains(m.CursoId))
+                .Select(m => m.EstudianteId)
+                .Distinct()
+                .ToList();
+
+            // Solo los estudiantes que están matriculados en los cursos del docente
+            var lista = db.Estudiantes
+                .Where(e => estudiantesIds.Contains(e.Id))
+                .ToList();
+
             return View(lista);
         }
 
@@ -80,13 +102,52 @@ namespace SistemaAcademicoMVC.Controllers
 
         /// <summary>
         /// Acción POST para registrar un nuevo estudiante.
+        /// La validación se realiza solo en este método y no se modifica ninguna otra lógica.
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Estudiante estudiante, int CuatrimestreId, int[] CursosSeleccionados)
+        public ActionResult Create(Estudiante estudiante, int? CuatrimestreId, int[] CursosSeleccionados)
         {
             if (Session["DocenteId"] == null)
                 return RedirectToAction("Login", "Account");
+
+            // Validación para campos obligatorios
+            if (string.IsNullOrWhiteSpace(estudiante.Nombre))
+                ModelState.AddModelError("Nombre", "El nombre es obligatorio.");
+            if (CursosSeleccionados == null || CursosSeleccionados.Length == 0)
+                ModelState.AddModelError("CursosSeleccionados", "Debe seleccionar al menos un curso.");
+            if (string.IsNullOrWhiteSpace(estudiante.Apellidos))
+                ModelState.AddModelError("Apellidos", "Los apellidos son obligatorios.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Identificacion))
+                ModelState.AddModelError("Identificacion", "La identificación es obligatoria.");
+            else if (db.Estudiantes.Any(e => e.Identificacion == estudiante.Identificacion))
+                ModelState.AddModelError("Identificacion", "Ya existe otro estudiante con esa identificación.");
+
+            if (estudiante.FechaNacimiento == null)
+                ModelState.AddModelError("FechaNacimiento", "La fecha de nacimiento es obligatoria.");
+            else if (estudiante.FechaNacimiento > DateTime.Today)
+                ModelState.AddModelError("FechaNacimiento", "La fecha de nacimiento no puede ser mayor a hoy.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Provincia))
+                ModelState.AddModelError("Provincia", "La provincia es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Canton))
+                ModelState.AddModelError("Canton", "El cantón es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Distrito))
+                ModelState.AddModelError("Distrito", "El distrito es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(estudiante.Correo))
+                ModelState.AddModelError("Correo", "El correo es obligatorio.");
+            else if (!estudiante.Correo.Contains("@") || !estudiante.Correo.Contains("."))
+                ModelState.AddModelError("Correo", "El correo no tiene un formato válido.");
+            else if (db.Estudiantes.Any(e => e.Correo == estudiante.Correo))
+                ModelState.AddModelError("Correo", "Ya existe otro estudiante con ese correo.");
+
+            // Validar selección de cuatrimestre
+            if (CuatrimestreId == null)
+                ModelState.AddModelError("CuatrimestreId", "Debe seleccionar un cuatrimestre.");
 
             if (ModelState.IsValid)
             {
@@ -102,7 +163,7 @@ namespace SistemaAcademicoMVC.Controllers
                         {
                             EstudianteId = estudiante.Id,
                             CursoId = cursoId,
-                            CuatrimestreId = CuatrimestreId
+                            CuatrimestreId = CuatrimestreId.Value // Ya garantizado no nulo
                         };
                         db.Matriculas.Add(matricula);
                     }
@@ -164,6 +225,7 @@ namespace SistemaAcademicoMVC.Controllers
 
             if (string.IsNullOrWhiteSpace(estudiante.Identificacion))
                 ModelState.AddModelError("Identificacion", "La identificación es obligatoria.");
+            // Solo error si la identificación ya existe en otro estudiante
             else if (db.Estudiantes.Any(e => e.Identificacion == estudiante.Identificacion && e.Id != estudiante.Id))
                 ModelState.AddModelError("Identificacion", "Ya existe otro estudiante con esa identificación.");
 
@@ -171,6 +233,7 @@ namespace SistemaAcademicoMVC.Controllers
                 ModelState.AddModelError("Correo", "El correo es obligatorio.");
             else if (!estudiante.Correo.Contains("@") || !estudiante.Correo.Contains("."))
                 ModelState.AddModelError("Correo", "El correo no tiene un formato válido.");
+            // Solo error si el correo ya existe en otro estudiante
             else if (db.Estudiantes.Any(e => e.Correo == estudiante.Correo && e.Id != estudiante.Id))
                 ModelState.AddModelError("Correo", "Ya existe otro estudiante con ese correo.");
 

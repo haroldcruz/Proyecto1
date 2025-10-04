@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using System;
 namespace SistemaAcademicoMVC.Models
 {
     public class Docente
     {
         public int Id { get; set; }
-
+        public int FailedLoginAttempts { get; set; }
+        public DateTime? LockoutEnd { get; set; }
         [Required(ErrorMessage = "El nombre es obligatorio")]
         public string Nombre { get; set; }
 
