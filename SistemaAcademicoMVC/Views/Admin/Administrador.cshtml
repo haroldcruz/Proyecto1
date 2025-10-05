@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SistemaAcademicoMVC.Models.Docente>
+@{
+    ViewBag.Title = "Administración de Docentes (Pruebas)";
+}
+
+<h2>Administración de Docentes (Pruebas)</h2>
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Intentos Fallidos</th>
+            <th>Bloqueado Hasta</th>
+            <th>Contraseña (Hash)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model)
+        {
+            <tr>
+                <td>@d.Nombre</td>
+                <td>@d.Correo</td>
+                <td>@d.FailedLoginAttempts</td>
+                <td>
+                    @(d.LockoutEnd.HasValue && d.LockoutEnd.Value > DateTime.Now
+                                ? d.LockoutEnd.Value.ToString("yyyy-MM-dd HH:mm")
+                                : "No")
+                </td>
+                <td>@d.Password</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,6 +1,6 @@
 ﻿{
-  "MaxFailedAttempts": 55,
+  "MaxFailedAttempts": 1,
   "LockoutMinutes": 0,
-  "CaptchaAfterAttempts": 83,
+  "CaptchaAfterAttempts": 1,
   "EnableCaptcha": true
 }

@@ -128,6 +128,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CursosController.cs" />
     <Compile Include="Controllers\DocentesController.cs" />
     <Compile Include="Controllers\EstudiantesController.cs" />
@@ -218,6 +219,7 @@
     <Content Include="Views\Cursos\Index.cshtml" />
     <Content Include="Views\Cursos\Edit.cshtml" />
     <Content Include="Views\Cursos\Delete.cshtml" />
+    <Content Include="Views\Admin\Administrador.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

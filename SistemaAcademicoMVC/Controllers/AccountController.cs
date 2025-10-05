@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using SistemaAcademicoMVC.Models;
 using System;
+
 /// <summary>
 /// Controlador de autenticación de docentes.
 /// Gestiona login, registro y cierre de sesión.
@@ -35,57 +36,64 @@ public class AccountController : Controller
             ViewBag.ShowCaptcha = false;
             return View(model);
         }
-        var captchaInput = Request["Captcha"];
+
         var docente = db.Docentes.FirstOrDefault(d => d.Correo == model.Correo);
         bool showCaptcha = false;
 
-        if (docente != null)
+        if (docente == null)
         {
-            // Verifica si el usuario está bloqueado
-            if (docente.LockoutEnd.HasValue && docente.LockoutEnd.Value > DateTime.Now)
+            ModelState.AddModelError("", "Credenciales inválidas");
+            ViewBag.ShowCaptcha = false;
+            return View(model);
+        }
+
+        // Verifica si el usuario está bloqueado
+        if (docente.LockoutEnd.HasValue && docente.LockoutEnd.Value > DateTime.Now)
+        {
+            var minutosRestantes = (docente.LockoutEnd.Value - DateTime.Now).TotalMinutes;
+            ModelState.AddModelError("", $"Cuenta bloqueada. Intente nuevamente en {Math.Ceiling(minutosRestantes)} minutos.");
+            ViewBag.ShowCaptcha = false;
+            return View(model);
+        }
+
+        // ¿Mostrar captcha?
+        if (config.EnableCaptcha && docente.FailedLoginAttempts >= config.CaptchaAfterAttempts)
+        {
+            showCaptcha = true;
+            ViewBag.ShowCaptcha = true;
+
+            var captchaInput = Request["Captcha"];
+            if (string.IsNullOrEmpty(captchaInput) || !CaptchaHelper.Validate(captchaInput))
             {
-                ModelState.AddModelError("", $"Cuenta bloqueada hasta {docente.LockoutEnd.Value:HH:mm}");
-                ViewBag.ShowCaptcha = false;
+                ModelState.AddModelError("Captcha", "El código ingresado es incorrecto.");
                 return View(model);
             }
+        }
+        else
+        {
+            ViewBag.ShowCaptcha = false;
+        }
 
-            // ¿Mostrar captcha?
-            if (config.EnableCaptcha && docente.FailedLoginAttempts >= config.CaptchaAfterAttempts)
+        string hash = PasswordHelper.HashPassword(model.Password);
+
+        if (docente.Password == hash)
+        {
+            // Login exitoso: resetea los intentos fallidos y desbloquea
+            docente.FailedLoginAttempts = 0;
+            docente.LockoutEnd = null;
+            db.SaveChanges();
+
+            Session["DocenteId"] = docente.Id;
+            Session["DocenteNombre"] = docente.Nombre;
+            Session["DocenteCorreo"] = docente.Correo;
+            TempData["SuccessMessage"] = "¡Bienvenido, " + docente.Nombre + "!";
+            return RedirectToAction("Index", "Home");
+        }
+        else
+        {
+            // Solo sumar intentos si no está bloqueado
+            if (docente.LockoutEnd == null || docente.LockoutEnd.Value <= DateTime.Now)
             {
-                showCaptcha = true;
-                ViewBag.ShowCaptcha = true;
-
-                // Validar captcha
-                // Asume que el campo en el formulario se llama "Captcha"
-                if (string.IsNullOrEmpty(Request["Captcha"]) || !CaptchaHelper.Validate(Request["Captcha"]))
-                {
-                    ModelState.AddModelError("Captcha", "Captcha incorrecto");
-                    return View(model);
-                }
-            }
-            else
-            {
-                ViewBag.ShowCaptcha = false;
-            }
-
-            string hash = PasswordHelper.HashPassword(model.Password);
-
-            if (docente.Password == hash)
-            {
-                // Login exitoso: resetea los intentos fallidos y desbloquea
-                docente.FailedLoginAttempts = 0;
-                docente.LockoutEnd = null;
-                db.SaveChanges();
-
-                Session["DocenteId"] = docente.Id;
-                Session["DocenteNombre"] = docente.Nombre;
-                Session["DocenteCorreo"] = docente.Correo;
-                TempData["SuccessMessage"] = "¡Bienvenido, " + docente.Nombre + "!";
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                // Intento fallido
                 docente.FailedLoginAttempts += 1;
 
                 // Si excede el máximo, bloquear
@@ -99,14 +107,15 @@ public class AccountController : Controller
                     ModelState.AddModelError("", "Credenciales inválidas");
                 }
                 db.SaveChanges();
-                ViewBag.ShowCaptcha = showCaptcha;
-                return View(model);
             }
-        }
-        else
-        {
-            ModelState.AddModelError("", "Credenciales inválidas");
-            ViewBag.ShowCaptcha = false;
+            else
+            {
+                // Ya está bloqueado, no sumar intentos
+                var minutosRestantes = (docente.LockoutEnd.Value - DateTime.Now).TotalMinutes;
+                ModelState.AddModelError("", $"Cuenta bloqueada. Intente nuevamente en {Math.Ceiling(minutosRestantes)} minutos.");
+            }
+
+            ViewBag.ShowCaptcha = showCaptcha;
             return View(model);
         }
     }

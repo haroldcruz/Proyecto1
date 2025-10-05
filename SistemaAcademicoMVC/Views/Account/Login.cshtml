@@ -1,51 +1,86 @@
 ﻿@model SistemaAcademicoMVC.Models.LoginViewModel
 
-<!-- Vista de ingreso de docentes. Muestra mensajes de error y validación. -->
 <h2>Ingreso de Docentes</h2>
-
-@using (Html.BeginForm("Login", "Account", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        @Html.LabelFor(m => m.Correo)
-        @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password)
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-    </div>
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <button type="submit" class="btn btn-primary">Ingresar</button>
-}
 
 @{
     var showCaptcha = ViewBag.ShowCaptcha != null && (bool)ViewBag.ShowCaptcha;
 }
 
-@if (showCaptcha)
-{
+<form id="login-form" action="@Url.Action("Login", "Account")" method="post">
+    @Html.AntiForgeryToken()
     <div class="form-group">
-        <label for="Captcha">Ingrese el código:</label>
-        <input type="text" name="Captcha" class="form-control" autocomplete="off" />
-        <img id="captcha-img" src="@Url.Action("GetCaptchaImage", "Account")" alt="Captcha" />
-        <button type="button" id="reload-captcha" class="btn btn-link">Recargar código</button>
-        @Html.ValidationMessage("Captcha", "", new { @class = "text-danger" })
+        @Html.LabelFor(m => m.Correo)
+        @Html.TextBoxFor(m => m.Correo, new { @class = "form-control", id = "Correo" })
+        @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
     </div>
-}
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "Password" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <!-- Aquí va el captcha, usando sintaxis Razor clásica -->
+    @if (showCaptcha)
+    {
+        <div class="form-group">
+            <label for="Captcha">Ingrese el código:</label>
+            <input type="text" name="Captcha" class="form-control" autocomplete="off" id="Captcha" />
+            <img id="captcha-img" src="@Url.Action("GetCaptchaImage", "Account")" alt="Captcha" />
+            <button type="button" id="reload-captcha" class="btn btn-link">Recargar código</button>
+            @Html.ValidationMessage("Captcha", "", new { @class = "text-danger" })
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Ingresar</button>
+</form>
 
 <p>
     ¿No tienes cuenta? <a href="@Url.Action("Register", "Account")">Registrar nuevo docente</a>
 </p>
 
+<!-- El script va FUERA de cualquier bloque Razor y con IDs correctos -->
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+    // Recarga el captcha
     var reloadBtn = document.getElementById('reload-captcha');
     if (reloadBtn) {
         reloadBtn.onclick = function () {
             var img = document.getElementById('captcha-img');
-            // Agrega un parámetro único para evitar el caché del navegador
             img.src = '@Url.Action("GetCaptchaImage", "Account")' + '?t=' + new Date().getTime();
         };
     }
+
+    // Validación de campos antes de enviar el formulario
+    document.getElementById('login-form').onsubmit = function (e) {
+        var correo = document.getElementById('Correo').value.trim();
+        var password = document.getElementById('Password').value.trim();
+        var errors = [];
+
+        // Validar correo
+        if (!correo) {
+            errors.push("El correo es obligatorio.");
+        } else if (!/^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/.test(correo)) {
+    errors.push("Formato de correo inválido.");
+}
+
+        // Validar contraseña
+        if (!password) {
+            errors.push("La contraseña es obligatoria.");
+        }
+
+        // Validar captcha si está presente
+        var captchaElem = document.getElementById('Captcha');
+        if (captchaElem && !captchaElem.value.trim()) {
+            errors.push("El código captcha es obligatorio.");
+        }
+
+        // Si hay errores, mostrar alerta y evitar envío
+        if (errors.length > 0) {
+            alert(errors.join('\n'));
+            e.preventDefault();
+            return false;
+        }
+    };
+});
 </script>
