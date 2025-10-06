@@ -132,6 +132,7 @@
     <Compile Include="Controllers\CursosController.cs" />
     <Compile Include="Controllers\DocentesController.cs" />
     <Compile Include="Controllers\EstudiantesController.cs" />
+    <Compile Include="Controllers\EvaluacionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -151,6 +152,10 @@
     <Compile Include="Migrations\202510040324591_AddLoginLockoutFieldsToDocente.cs" />
     <Compile Include="Migrations\202510040324591_AddLoginLockoutFieldsToDocente.designer.cs">
       <DependentUpon>202510040324591_AddLoginLockoutFieldsToDocente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202510060202070_evaluacion.cs" />
+    <Compile Include="Migrations\202510060202070_evaluacion.designer.cs">
+      <DependentUpon>202510060202070_evaluacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Curso.cs" />
@@ -213,13 +218,14 @@
     <Content Include="Views\Estudiantes\Edit.cshtml" />
     <Content Include="Views\Estudiantes\Delete.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Docentes\Register.cshtml" />
     <Content Include="Views\Docentes\EditarPerfil.cshtml" />
     <Content Include="Views\Cursos\Create.cshtml" />
     <Content Include="Views\Cursos\Index.cshtml" />
     <Content Include="Views\Cursos\Edit.cshtml" />
     <Content Include="Views\Cursos\Delete.cshtml" />
     <Content Include="Views\Admin\Administrador.cshtml" />
+    <Content Include="Views\Evaluacion\Calificar.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -247,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202510040324591_AddLoginLockoutFieldsToDocente.resx">
       <DependentUpon>202510040324591_AddLoginLockoutFieldsToDocente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510060202070_evaluacion.resx">
+      <DependentUpon>202510060202070_evaluacion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -87,6 +87,6 @@ C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\Siste
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.csproj.CopyComplete
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.dll
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.pdb
-C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.csprojAssemblyReference.cache
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AddCorreoDocenteToCurso.resources
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AddLoginLockoutFieldsToDocente.resources
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.evaluacion.resources

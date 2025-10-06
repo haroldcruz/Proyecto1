@@ -19,4 +19,5 @@ namespace SistemaAcademicoMVC.Models
         public virtual ICollection<Participacion> Participaciones { get; set; }
         public virtual ICollection<Tarea> Tareas { get; set; }
     }
+
 }

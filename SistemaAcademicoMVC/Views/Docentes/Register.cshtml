@@ -2,7 +2,7 @@
 
 <h2>Registro de Docente</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "register-form", autocomplete = "off" }))
+@using (Html.BeginForm("Register", "Docentes", FormMethod.Post, new { id = "register-form", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-group">
@@ -48,7 +48,7 @@ document.getElementById('register-form').onsubmit = function(e) {
         if (spinner) spinner.style.display = 'block';
     }
     localStorage.setItem('docenteRegistro', JSON.stringify({ nombre, correo }));
-    fetch('@Url.Action("Register", "Account")', {
+    fetch('@Url.Action("Register", "Docentes")', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `Nombre=${encodeURIComponent(nombre)}&Correo=${encodeURIComponent(correo)}&Password=${encodeURIComponent(password)}&__RequestVerificationToken=${document.querySelector('input[name="__RequestVerificationToken"]').value}`

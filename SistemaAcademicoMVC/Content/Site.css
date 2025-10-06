@@ -22,3 +22,11 @@ select,
 textarea {
     max-width: 280px;
 }
+/* mensaje de rror en la vista calificar*/
+#msgEstado {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    z-index: 9999;
+    width: 350px;
+}

@@ -5,15 +5,12 @@ using System;
 
 /// <summary>
 /// Controlador de autenticación de docentes.
-/// Gestiona login, registro y cierre de sesión.
+/// Gestiona login y cierre de sesión.
 /// </summary>
 public class AccountController : Controller
 {
     private SistemaAcademicoMVCContext db = new SistemaAcademicoMVCContext();
 
-    /// <summary>
-    /// Muestra el formulario de login.
-    /// </summary>
     [HttpGet]
     public ActionResult Login()
     {
@@ -21,14 +18,10 @@ public class AccountController : Controller
         return View();
     }
 
-    /// <summary>
-    /// Procesa el login y muestra mensajes de éxito o error.
-    /// </summary>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Login(LoginViewModel model)
     {
-        // Carga la configuración desde JSON
         var config = LoginConfig.Load(Server.MapPath("~/App_Data/loginConfig.json"));
 
         if (!ModelState.IsValid)
@@ -47,7 +40,6 @@ public class AccountController : Controller
             return View(model);
         }
 
-        // Verifica si el usuario está bloqueado
         if (docente.LockoutEnd.HasValue && docente.LockoutEnd.Value > DateTime.Now)
         {
             var minutosRestantes = (docente.LockoutEnd.Value - DateTime.Now).TotalMinutes;
@@ -56,7 +48,6 @@ public class AccountController : Controller
             return View(model);
         }
 
-        // ¿Mostrar captcha?
         if (config.EnableCaptcha && docente.FailedLoginAttempts >= config.CaptchaAfterAttempts)
         {
             showCaptcha = true;
@@ -78,7 +69,6 @@ public class AccountController : Controller
 
         if (docente.Password == hash)
         {
-            // Login exitoso: resetea los intentos fallidos y desbloquea
             docente.FailedLoginAttempts = 0;
             docente.LockoutEnd = null;
             db.SaveChanges();
@@ -91,12 +81,10 @@ public class AccountController : Controller
         }
         else
         {
-            // Solo sumar intentos si no está bloqueado
             if (docente.LockoutEnd == null || docente.LockoutEnd.Value <= DateTime.Now)
             {
                 docente.FailedLoginAttempts += 1;
 
-                // Si excede el máximo, bloquear
                 if (docente.FailedLoginAttempts >= config.MaxFailedAttempts)
                 {
                     docente.LockoutEnd = DateTime.Now.AddMinutes(config.LockoutMinutes);
@@ -110,7 +98,6 @@ public class AccountController : Controller
             }
             else
             {
-                // Ya está bloqueado, no sumar intentos
                 var minutosRestantes = (docente.LockoutEnd.Value - DateTime.Now).TotalMinutes;
                 ModelState.AddModelError("", $"Cuenta bloqueada. Intente nuevamente en {Math.Ceiling(minutosRestantes)} minutos.");
             }
@@ -120,52 +107,12 @@ public class AccountController : Controller
         }
     }
 
-    /// <summary>
-    /// Muestra el formulario de registro de docentes.
-    /// </summary>
-    [HttpGet]
-    public ActionResult Register() => View();
-
-    /// <summary>
-    /// Procesa el registro de docentes y muestra mensaje de éxito o error.
-    /// </summary>
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Register(Docente model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
-
-        // Verifica si el correo ya está registrado
-        if (db.Docentes.Any(d => d.Correo == model.Correo))
-        {
-            ModelState.AddModelError("Correo", "Ya existe un docente con ese correo.");
-            return View(model);
-        }
-
-        model.Password = PasswordHelper.HashPassword(model.Password);
-        db.Docentes.Add(model);
-        db.SaveChanges();
-
-        TempData["SuccessMessage"] = "¡Registro exitoso! Ahora puedes ingresar.";
-
-        return RedirectToAction("Login");
-    }
-
-    /// <summary>
-    /// Cierra la sesión y redirige a la página principal.
-    /// </summary>
     public ActionResult Logout()
     {
         Session.Clear();
         return RedirectToAction("Index", "Home");
     }
 
-    /// <summary>
-    /// Genera la imagen del captcha.
-    /// </summary>
     public FileResult GetCaptchaImage()
     {
         string code = CaptchaHelper.Generate();
@@ -182,5 +129,4 @@ public class AccountController : Controller
             return File(ms.ToArray(), "image/png");
         }
     }
-
 }
