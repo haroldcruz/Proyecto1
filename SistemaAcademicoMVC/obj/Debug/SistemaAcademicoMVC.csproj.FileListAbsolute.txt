@@ -82,11 +82,11 @@ C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\bin\es\System.W
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\bin\es\System.Web.WebPages.Razor.resources.dll
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.InitialCreate.resources
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.SyncModels.resources
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AddCorreoDocenteToCurso.resources
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AddLoginLockoutFieldsToDocente.resources
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.evaluacion.resources
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.csproj.GenerateResource.cache
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.csproj.CoreCompileInputs.cache
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.csproj.CopyComplete
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.dll
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.pdb
-C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AddCorreoDocenteToCurso.resources
-C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AddLoginLockoutFieldsToDocente.resources
-C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.evaluacion.resources

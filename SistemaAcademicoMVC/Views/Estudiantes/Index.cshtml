@@ -40,16 +40,50 @@
                     @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
                     @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
                     @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
-                    @foreach (var matricula in item.Matriculas)
-                    {
-                        @Html.ActionLink(
-                            $"Califa: {matricula.Curso.Nombre}", // nombre del curso
-                            "Calificar",
-                            "Evaluacion",
-                            new { cursoId = matricula.CursoId, estudianteId = item.Id },
-                            new { @class = "btn btn-success btn-sm" }
-                        )
-                    }
+
+                    @* Dropdown para calificaciones/modificaciones *@
+                    <div class="dropdown" style="display:inline-block;">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            Calificar <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var matricula in item.Matriculas)
+                            {
+                                var evaluacion = matricula.Evaluaciones.FirstOrDefault(); // obtiene la evaluación
+
+                                if (evaluacion == null)
+                                {
+                                    <li>
+                                        @Html.ActionLink(
+                                            matricula.Curso.Nombre,
+                                            "Calificar",
+                                            "Evaluacion",
+                                            new { cursoId = matricula.CursoId, estudianteId = item.Id },
+                                            new {
+                                                @class = "btn btn-success btn-sm", // verde para calificar
+                                                title = "Calificar curso: " + matricula.Curso.Nombre // tooltip
+                                            }
+                                        )
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        @Html.ActionLink(
+                                            matricula.Curso.Nombre,
+                                            "Edit",
+                                            "Evaluacion",
+                                            new { id = evaluacion.Id },
+                                            new {
+                                                @class = "btn btn-warning btn-sm", // naranja para modificar
+                                                title = "Modificar calificación" // tooltip
+                                            }
+                                        )
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
                 </td>
             </tr>
         }

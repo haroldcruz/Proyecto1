@@ -10,6 +10,10 @@ namespace SistemaAcademicoMVC.Controllers
     {
         public ActionResult Index()
         {
+            //protege la ruta
+            if (Session["DocenteId"] == null)
+                return RedirectToAction("Login", "Account");
+
             return View();
         }
     }

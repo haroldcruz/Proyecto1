@@ -30,3 +30,25 @@ textarea {
     z-index: 9999;
     width: 350px;
 }
+/* Estilo para el dropdown de calificaciones */
+.dropdown-menu > li > a.btn-success {
+    background-color: #28a745;
+    color: #fff;
+    margin-bottom: 4px;
+    width: 100%;
+    text-align: left;
+}
+
+.dropdown-menu > li > a.btn-warning {
+    background-color: #ffc107;
+    color: #fff;
+    margin-bottom: 4px;
+    width: 100%;
+    text-align: left;
+}
+/* Mejor separación y sombra en el dropdown */
+.dropdown-menu {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    padding: 8px 0;
+    min-width: 200px;
+}

@@ -39,9 +39,9 @@ namespace SistemaAcademicoMVC.Controllers
                 .Distinct()
                 .ToList();
 
-            // Solo los estudiantes que están matriculados en los cursos del docente, incluye matrículas
+            // Solo los estudiantes que están matriculados en los cursos del docente, incluye matrículas, con evluaciones
             var lista = db.Estudiantes
-                .Include(e => e.Matriculas) // Incluye las matrículas de cada estudiante
+                .Include(e => e.Matriculas.Select(m => m.Evaluaciones)) // incluye evaluaciones
                 .Where(e => estudiantesIds.Contains(e.Id))
                 .ToList();
 

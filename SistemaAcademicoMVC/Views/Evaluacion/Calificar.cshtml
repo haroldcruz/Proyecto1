@@ -1,12 +1,11 @@
 ﻿@model SistemaAcademicoMVC.Models.Evaluacion
-
 @{
-    ViewBag.Title = "Calificar estudiante";
+    // El título cambia según si es edición o registro
+    ViewBag.Title = Model.Id == 0 ? "Calificar estudiante" : "Modificar calificación";
     var estudiante = ViewBag.Estudiante;
     var curso = ViewBag.Curso;
 }
-
-<h2>Calificar estudiante</h2>
+<h2>@ViewBag.Title</h2>
 
 @if (estudiante != null)
 {
@@ -19,14 +18,13 @@
 
 <div id="msgEstado" style="display:none; position:absolute; top:20px; right:30px; z-index:9999; min-width:250px; max-width:350px;"></div>
 
-@using (Html.BeginForm("Calificar", "Evaluacion", FormMethod.Post, new { id = "calificarForm", autocomplete = "off" }))
+@using (Html.BeginForm(Model.Id == 0 ? "Calificar" : "Edit", "Evaluacion", FormMethod.Post, new { id = "calificarForm", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.MatriculaId)
 
     <div class="form-group">
-        @Html.LabelFor(m => m.NotaNumerica)
-        @Html.TextBoxFor(m => m.NotaNumerica, new { @class = "form-control", type = "number", min = "0", max = "100", required = "required" })
+        @Html.LabelFor(m => m.NotaNumerica)@Html.TextBoxFor(m => m.NotaNumerica, new { @class = "form-control", type = "text", pattern = @"^\d+(\.\d{1,2})?$", inputmode = "decimal" })
         @Html.ValidationMessageFor(m => m.NotaNumerica)
     </div>
 
@@ -51,8 +49,6 @@
     <button type="submit" class="btn btn-primary">Guardar calificación</button>
 }
 
-
-
 @section scripts {
     <script>
         $('#calificarForm').submit(function (e) {
@@ -66,7 +62,10 @@
                 success: function (response) {
                     if (response.success) {
                         $('#msgEstado').html('<div class="alert alert-success">' + response.mensaje + '</div>').show();
-                        setTimeout(function () { $('#msgEstado').fadeOut(); }, 4000);
+                        setTimeout(function () {
+                            $('#msgEstado').fadeOut();
+                            window.location.href = '/Estudiantes/Index'; // redirige luego de mostrar mensaje
+                        }, 2000);
                     } else {
                         $('#msgEstado').html(""); // limpiar
                         $.each(response.errores, function (i, error) {
@@ -84,8 +83,5 @@
                 }
             });
         });
-        if (response.success) {
-            window.location.href = '/Estudiantes/Index'; // Redirige al listado
-        }
     </script>
 }
