@@ -1,87 +1,33 @@
-﻿@model SistemaAcademicoMVC.Models.Evaluacion
+﻿@model CalificarViewModel
 @{
-    // El título cambia según si es edición o registro
-    ViewBag.Title = Model.Id == 0 ? "Calificar estudiante" : "Modificar calificación";
-    var estudiante = ViewBag.Estudiante;
-    var curso = ViewBag.Curso;
-}
-<h2>@ViewBag.Title</h2>
-
-@if (estudiante != null)
-{
-    <p><strong>Estudiante:</strong> @estudiante.Nombre @estudiante.Apellidos</p>
-}
-@if (curso != null)
-{
-    <p><strong>Curso:</strong> @curso.Nombre (@curso.Codigo)</p>
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="msgEstado" style="display:none; position:absolute; top:20px; right:30px; z-index:9999; min-width:250px; max-width:350px;"></div>
+<!-- Vista principal de calificación -->
+<h2>Calificar estudiante: @Model.Matricula.Estudiante.Nombre @Model.Matricula.Estudiante.Apellidos</h2>
+<h4>Curso: @Model.Matricula.Curso.Nombre</h4>
 
-@using (Html.BeginForm(Model.Id == 0 ? "Calificar" : "Edit", "Evaluacion", FormMethod.Post, new { id = "calificarForm", autocomplete = "off" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.MatriculaId)
+<div>
+    <button onclick="mostrarModulo('participacion')">Registrar Participaciones</button>
+    <button onclick="mostrarModulo('asignaciones')">Calificar Asignaciones</button>
+    <button onclick="mostrarModulo('notaFinal')">Generar Nota Final</button>
+</div>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.NotaNumerica)@Html.TextBoxFor(m => m.NotaNumerica, new { @class = "form-control", type = "text", pattern = @"^\d+(\.\d{1,2})?$", inputmode = "decimal" })
-        @Html.ValidationMessageFor(m => m.NotaNumerica)
-    </div>
+<!-- Modulos parciales -->
+<div id="modulo-participacion" style="display:none;">
+    @Html.Partial("_ParticipacionPartial", Model.Participaciones)
+</div>
+<div id="modulo-asignaciones" style="display:none;">
+    @Html.Partial("_AsignacionesPartial", Model.Tareas)
+</div>
+<div id="modulo-notaFinal" style="display:none;">
+    @Html.Partial("_NotaFinalPartial", Model)
+</div>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Observaciones)
-        @Html.TextAreaFor(m => m.Observaciones, new { @class = "form-control", required = "required" })
-        @Html.ValidationMessageFor(m => m.Observaciones)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.TipoParticipacion)
-        @Html.TextBoxFor(m => m.TipoParticipacion, new { @class = "form-control", required = "required" })
-        @Html.ValidationMessageFor(m => m.TipoParticipacion)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.Estado)
-        @Html.DropDownListFor(m => m.Estado, new SelectList(new[] { "Aprobado", "Reprobado" }), "Seleccione", new { @class = "form-control", required = "required" })
-        @Html.ValidationMessageFor(m => m.Estado)
-    </div>
-
-    <button type="submit" class="btn btn-primary">Guardar calificación</button>
-}
-
-@section scripts {
-    <script>
-        $('#calificarForm').submit(function (e) {
-            e.preventDefault();
-            var form = $(this);
-
-            $.ajax({
-                url: form.attr('action'),
-                type: 'POST',
-                data: form.serialize(),
-                success: function (response) {
-                    if (response.success) {
-                        $('#msgEstado').html('<div class="alert alert-success">' + response.mensaje + '</div>').show();
-                        setTimeout(function () {
-                            $('#msgEstado').fadeOut();
-                            window.location.href = '/Estudiantes/Index'; // redirige luego de mostrar mensaje
-                        }, 2000);
-                    } else {
-                        $('#msgEstado').html(""); // limpiar
-                        $.each(response.errores, function (i, error) {
-                            $('#msgEstado').append(
-                                '<div class="alert alert-danger">Error en "' + error.Campo + '": ' + error.Mensaje + '</div>'
-                            );
-                        });
-                        $('#msgEstado').show();
-                        setTimeout(function () { $('#msgEstado').fadeOut(); }, 4000);
-                    }
-                },
-                error: function () {
-                    $('#msgEstado').html('<div class="alert alert-danger">Ocurrió un error inesperado.</div>').show();
-                    setTimeout(function () { $('#msgEstado').fadeOut(); }, 4000);
-                }
-            });
-        });
-    </script>
-}
+<script>
+    function mostrarModulo(modulo) {
+        document.getElementById('modulo-participacion').style.display = modulo === 'participacion' ? 'block' : 'none';
+        document.getElementById('modulo-asignaciones').style.display = modulo === 'asignaciones' ? 'block' : 'none';
+        document.getElementById('modulo-notaFinal').style.display = modulo === 'notaFinal' ? 'block' : 'none';
+    }
+</script>

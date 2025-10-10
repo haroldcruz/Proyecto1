@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SistemaAcademicoMVC.Models.Tarea>
+@{
+    ViewBag.Title = "Tareas";
+}
+
+<p>
+    @Html.ActionLink("Agregar nueva tarea", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Curso</th>
+            <th>Descripción</th>
+            <th>Fecha Entrega</th>
+            <th>Ponderación (%)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model)
+        {
+            <tr>
+                <td>@(t.Matricula?.Curso?.Nombre ?? "-")</td>
+                <td>@t.Descripcion</td>
+                <td>@t.FechaEntrega.ToString("yyyy-MM-dd")</td>
+                <td>@t.PorcentajePonderacion</td>
+                <td>
+                    @Html.ActionLink("Ver", "Details", new { id = t.Id }, new { @class = "btn btn-info btn-sm" })
+                    @Html.ActionLink("Editar", "Edit", new { id = t.Id }, new { @class = "btn btn-warning btn-sm" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = t.Id }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,31 @@
+﻿@model SistemaAcademicoMVC.Models.Tarea
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Editar Tarea</h2>
+<!-- Formulario protegido con token antifalsificación -->
+<form method="post" action="@Url.Action("EditarTarea", "Evaluacion")">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    <div>
+        <label>Descripción:</label>
+        <input type="text" value="@Model.Descripcion" readonly />
+    </div>
+    <div>
+        <label>Fecha Entrega:</label>
+        <input type="text" value="@Model.FechaEntrega.ToShortDateString()" readonly />
+    </div>
+    <div>
+        <label>Ponderación (%):</label>
+        <input type="text" value="@Model.PorcentajePonderacion" readonly />
+    </div>
+    <div>
+        <label>Nota:</label>
+        @Html.TextBoxFor(m => m.Nota)
+    </div>
+    <div>
+        <label>Entregada:</label>
+        @Html.CheckBoxFor(m => m.Entregada)
+    </div>
+    <button type="submit">Guardar</button>
+</form>

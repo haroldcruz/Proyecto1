@@ -1,0 +1,21 @@
+﻿@model SistemaAcademicoMVC.Models.Participacion
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar Participación</h2>
+
+<!-- Formulario protegido con antifalsificación -->
+<form method="post" action="@Url.Action("EditarParticipacion", "Evaluacion")">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    <div>
+        <label>Fecha:</label>
+        @Html.DisplayFor(m => m.Fecha)
+    </div>
+    <div>
+        <label>¿Asistió?</label>
+        @Html.CheckBoxFor(m => m.Asistio)
+    </div>
+    <button type="submit">Guardar</button>
+</form>

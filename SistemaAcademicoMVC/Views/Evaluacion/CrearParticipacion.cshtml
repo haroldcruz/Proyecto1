@@ -1,0 +1,19 @@
+﻿@model int?
+@{
+    ViewBag.Title = "Registrar Participación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Registrar Participación</h2>
+<form method="post" action="@Url.Action("CrearParticipacion", "Evaluacion")">
+    @Html.AntiForgeryToken()
+    <input type="number" name="matriculaId" value="@Model" readonly />
+    <div>
+        <label>¿Asistió?</label>
+        <input type="checkbox" name="Asistio" value="true" />
+    </div>
+    <div>
+        <label>Fecha de Participación</label>
+        <input type="date" name="Fecha" required />
+    </div>
+    <button type="submit">Guardar</button>
+</form>

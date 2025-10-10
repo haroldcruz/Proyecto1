@@ -1,0 +1,27 @@
+﻿@model List<SistemaAcademicoMVC.Models.Tarea>
+<!-- Tabla de asignaciones/tareas -->
+<table>
+    <thead>
+        <tr>
+            <th>Descripción</th>
+            <th>Fecha Entrega</th>
+            <th>Ponderación (%)</th>
+            <th>Entregada</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.Descripcion</td>
+                <td><input type="text" value="@t.FechaEntrega.ToShortDateString()" readonly /></td>
+                <td><input type="text" value="@t.PorcentajePonderacion" readonly /></td>
+                <td>@(t.Entregada ? "Sí" : "No")</td>
+                <td>
+                    <a href="@Url.Action("EditarTarea", "Evaluacion", new { id = t.Id })">Editar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,10 @@
+﻿@model int?
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Generar Nota Final</h2>
+<form method="post" action="@Url.Action("GenerarNotaFinal", "Evaluacion")">
+    @Html.AntiForgeryToken()
+    @Html.Hidden("matriculaId", Model)
+    <button type="submit">Generar Nota Final</button>
+</form>

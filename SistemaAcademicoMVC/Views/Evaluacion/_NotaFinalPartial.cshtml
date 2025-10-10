@@ -1,0 +1,41 @@
+﻿@model CalificarViewModel
+<!-- Generar Nota Final -->
+<div>
+    <h3>Nota Final</h3>
+    @if (Model.Evaluacion != null)
+    {
+        <p>Nota: @Model.Evaluacion.NotaNumerica</p>
+        <p>Estado: @Model.Evaluacion.Estado</p>
+        <!-- Botón para recalcular la nota final -->
+        <form method="post" action="@Url.Action("GenerarNotaFinal", "Evaluacion")">
+            @Html.AntiForgeryToken()
+            @Html.Hidden("matriculaId", Model.Matricula.Id)
+            <button type="submit">Recalificar</button>
+        </form>
+        if (TempData["Error"] != null)
+        {
+            <p style="color:red;">@TempData["Error"]</p>
+        }
+        if (TempData["Success"] != null)
+        {
+            <p style="color:green;">@TempData["Success"]</p>
+        }
+    }
+    else
+    {
+        <!-- Formulario protegido con antifalsificación -->
+        <form method="post" action="@Url.Action("GenerarNotaFinal", "Evaluacion")">
+            @Html.AntiForgeryToken()
+            @Html.Hidden("matriculaId", Model.Matricula.Id)
+            <button type="submit">Generar Nota Final</button>
+        </form>
+        if (TempData["Error"] != null)
+        {
+            <p style="color:red;">@TempData["Error"]</p>
+        }
+        if (TempData["Success"] != null)
+        {
+            <p style="color:green;">@TempData["Success"]</p>
+        }
+    }
+</div>

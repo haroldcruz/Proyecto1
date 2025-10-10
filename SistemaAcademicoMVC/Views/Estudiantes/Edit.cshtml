@@ -1,8 +1,6 @@
 ﻿@model SistemaAcademicoMVC.Models.Estudiante
 
 @{
-    // Vista Edit: Permite modificar los datos de un estudiante existente.
-    // Incluye validaciones y muestra mensajes de error si los datos ingresados no son válidos.
     ViewBag.Title = "Editar Estudiante";
 }
 
@@ -15,13 +13,10 @@
     <div class="form-horizontal">
         <h4>Estudiante</h4>
         <hr />
-        @* // Muestra los mensajes de error de validación general*@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        @* // Campo oculto para el Id del estudiante*@
         @Html.HiddenFor(model => model.Id)
 
-        @* // Campo: Nombre*@
+        @* Campos personales *@
         <div class="form-group">
             @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -29,8 +24,6 @@
                 @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @* // Campo: Apellidos*@
         <div class="form-group">
             @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -38,8 +31,6 @@
                 @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @* // Campo: Identificación*@
         <div class="form-group">
             @Html.LabelFor(model => model.Identificacion, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -47,17 +38,13 @@
                 @Html.ValidationMessageFor(model => model.Identificacion, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @* // Campo: Fecha de Nacimiento*@
         <div class="form-group">
             @Html.LabelFor(model => model.FechaNacimiento, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FechaNacimiento, new { htmlAttributes = new { @class = "form-control", type = "date", id = "FechaNacimiento" } })
+                @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
                 @Html.ValidationMessageFor(model => model.FechaNacimiento, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @*// Campo: Provincia*@
         <div class="form-group">
             @Html.LabelFor(model => model.Provincia, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -65,8 +52,6 @@
                 @Html.ValidationMessageFor(model => model.Provincia, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @*// Campo: Cantón*@
         <div class="form-group">
             @Html.LabelFor(model => model.Canton, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -74,8 +59,6 @@
                 @Html.ValidationMessageFor(model => model.Canton, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @*// Campo: Distrito*@
         <div class="form-group">
             @Html.LabelFor(model => model.Distrito, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -83,8 +66,6 @@
                 @Html.ValidationMessageFor(model => model.Distrito, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @*// Campo: Correo*@
         <div class="form-group">
             @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -93,7 +74,16 @@
             </div>
         </div>
 
-        @* // Botón para guardar los cambios*@
+        @* Selector múltiple de cursos: solo los cursos del docente, los ya matriculados aparecen seleccionados *@
+        <div class="form-group">
+            @Html.Label("Cursos asignados", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ListBox("CursosSeleccionados", (IEnumerable<SelectListItem>)ViewBag.CursosDocente, new { @class = "form-control", multiple = "multiple" })
+                @Html.ValidationMessage("CursosSeleccionados", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* Botones de acción *@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Guardar cambios" class="btn btn-primary" />
@@ -101,63 +91,25 @@
             </div>
         </div>
     </div>
+    <input type="hidden" name="CuatrimestreId" value="@ViewBag.CuatrimestreId" />
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 
-<script>
-setTimeout(function () {
-    var errores = document.getElementsByClassName('text-danger');
-    for (var i = 0; i < errores.length; i++) {
-        errores[i].style.display = 'none';
-    }
-}, 4000);
-
-const camposEdit = [
-    "Nombre",
-    "Apellidos",
-    "Identificacion",
-    "FechaNacimiento",
-    "Provincia",
-    "Canton",
-    "Distrito",
-    "Correo"
-];
-
-// Todo en un solo window.onload
-window.onload = function () {
-    // Cargar la fecha si el campo está vacío
-    var fechaInput = document.getElementById("FechaNacimiento");
-    if (fechaInput && !fechaInput.value) {
-        fechaInput.value = "@Model.FechaNacimiento.ToString("yyyy-MM-dd")";
-    }
-    // Luego localStorage
-    camposEdit.forEach(function (campo) {
-        var input = document.getElementById(campo);
-        if (input && localStorage.getItem("edit_" + campo)) {
-            input.value = localStorage.getItem("edit_" + campo);
-        }
-    });
-};
-
-// Guardar cada cambio en localStorage
-camposEdit.forEach(function (campo) {
-    var input = document.getElementById(campo);
-    if (input) {
-        input.addEventListener("input", function () {
-            localStorage.setItem("edit_" + campo, this.value);
-        });
-    }
-});
-
-// Limpiar localStorage si la edición fue exitosa (redirección)
-window.addEventListener("beforeunload", function () {
-    if (window.location.pathname.endsWith("/Estudiantes/Index")) {
-        camposEdit.forEach(function (campo) {
-            localStorage.removeItem("edit_" + campo);
-        });
-    }
-});
-</script>    
-// Incluye los scripts para validación del lado del cliente
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="success-alert" class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+    <script>
+        // Oculta el mensaje después de 3 segundos
+        setTimeout(function () {
+            $('#success-alert').fadeOut('slow');
+        }, 3000);
+    </script>
 }

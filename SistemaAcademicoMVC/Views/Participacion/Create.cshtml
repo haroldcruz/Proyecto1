@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Registrar Participación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Registrar Participación</h2>
+
+<!-- Combo de cursos -->
+<div class="form-group">
+    <label for="curso-select">Curso</label>
+    @Html.DropDownList("CursoId", (IEnumerable<SelectListItem>)ViewBag.Cursos, "Seleccione un curso", new { @class = "form-control", id = "curso-select" })
+</div>
+
+<!-- Fecha general -->
+<div class="form-group">
+    <label for="fecha-general">Fecha</label>
+    <input type="date" id="fecha-general" class="form-control" required />
+</div>
+
+<!-- Tabla de estudiantes -->
+<div id="tabla-estudiantes"></div>
+
+<button id="guardar-btn" class="btn btn-primary" style="display:none;">Guardar Participaciones</button>
+
+<div id="result-mensaje"></div>
+
+@section scripts{
+    <script>
+    // Carga estudiantes al seleccionar curso
+    $('#curso-select').change(function () {
+        var cursoId = $(this).val();
+        $('#tabla-estudiantes').empty();
+        $('#guardar-btn').hide();
+        if (cursoId) {
+            $.post('@Url.Action("EstudiantesPorCurso", "Participacion")', { cursoId: cursoId }, function (data) {
+                if (data.length > 0) {
+                    var html = '<table class="table"><thead><tr><th>Estudiante</th><th>Asistió</th><th>Comentario</th></tr></thead><tbody>';
+                    $.each(data, function (i, est) {
+                        html += '<tr data-matricula="'+est.MatriculaId+'">' +
+                                '<td>'+est.Nombre+'</td>' +
+                                '<td><select class="asistio form-control"><option value="true">Sí</option><option value="false">No</option></select></td>' +
+                                '<td><input type="text" class="comentario form-control" maxlength="255" /></td>' +
+                                '</tr>';
+                    });
+                    html += '</tbody></table>';
+                    $('#tabla-estudiantes').html(html);
+                    $('#guardar-btn').show();
+                } else {
+                    $('#tabla-estudiantes').html('<div class="alert alert-warning">No hay estudiantes en este curso.</div>');
+                }
+            });
+        }
+    });
+
+    // Guarda participaciones vía AJAX/JSON
+    $('#guardar-btn').click(function () {
+        var cursoId = $('#curso-select').val();
+        var fecha = $('#fecha-general').val();
+        var participaciones = [];
+        $('#tabla-estudiantes tbody tr').each(function () {
+            participaciones.push({
+                MatriculaId: $(this).data('matricula'),
+                Nombre: $(this).find('td:first').text(),
+                Asistio: $(this).find('.asistio').val() === "true",
+                Descripcion: $(this).find('.comentario').val()
+            });
+        });
+
+        $.ajax({
+            url: '@Url.Action("GuardarParticipaciones", "Participacion")',
+            method: 'POST',
+            data: JSON.stringify({
+                cursoId: cursoId,
+                fecha: fecha,
+                participaciones: participaciones
+            }),
+            contentType: "application/json", // importante para JSON
+            success: function (resp) {
+                if (resp.success) {
+                    $('#result-mensaje').html('<div class="alert alert-success">'+resp.mensaje+'</div>');
+                    setTimeout(function(){ window.location.href = '@Url.Action("Index", "Participacion")'; }, 1200);
+                } else {
+                    var msg = '<div class="alert alert-danger">'+resp.mensaje;
+                    if (resp.errores) {
+                        msg += '<ul>'; $.each(resp.errores, function(i, e){ msg += '<li>'+e+'</li>'; }); msg += '</ul>';
+                    }
+                    msg += '</div>';
+                    $('#result-mensaje').html(msg);
+                }
+            },
+            error: function () {
+                $('#result-mensaje').html('<div class="alert alert-danger">Error al guardar.</div>');
+            }
+        });
+    });
+    </script>
+}

@@ -1,0 +1,24 @@
+﻿@model SistemaAcademicoMVC.Models.Tarea
+@{
+    ViewBag.Title = "Detalle de Tarea";
+}
+
+<h2>Detalle de Tarea</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Curso</dt>
+        <dd>@(Model.Matricula?.Curso?.Nombre ?? "-")</dd>
+        <dt>Descripción</dt>
+        <dd>@Model.Descripcion</dd>
+        <dt>Fecha Entrega</dt>
+        <dd>@Model.FechaEntrega.ToString("yyyy-MM-dd")</dd>
+        <dt>Ponderación</dt>
+        <dd>@Model.PorcentajePonderacion %</dd>
+        <dt>Entregada</dt>
+        <dd>@(Model.Entregada ? "Sí" : "No")</dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+</p>

@@ -5,7 +5,25 @@
 }
 
 <h2>Lista de Estudiantes</h2>
-
+<script>
+    // Borra localStorage solo si el registro fue exitoso
+    if (window.location.search.includes("registro=ok")) {
+        [
+            "nombreEstudiante",
+            "apellidosEstudiante",
+            "identificacionEstudiante",
+            "fechaNacimientoEstudiante",
+            "provinciaEstudiante",
+            "cantonEstudiante",
+            "distritoEstudiante",
+            "correoEstudiante",
+            "cursosEstudiante",
+            "cuatrimestreEstudiante"
+        ].forEach(function (campo) {
+            localStorage.removeItem(campo);
+        });
+    }
+</script>
 <p>
     @Html.ActionLink("Crear Nuevo Estudiante", "Create", null, new { @class = "btn btn-primary" })
 </p>
@@ -71,9 +89,9 @@
                                     <li>
                                         @Html.ActionLink(
                                             matricula.Curso.Nombre,
-                                            "Edit",
+                                            "Calificar",
                                             "Evaluacion",
-                                            new { id = evaluacion.Id },
+                                             new { cursoId = matricula.CursoId, estudianteId = item.Id },
                                             new {
                                                 @class = "btn btn-warning btn-sm", // naranja para modificar
                                                 title = "Modificar calificación" // tooltip

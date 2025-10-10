@@ -1,0 +1,28 @@
+﻿@model List<SistemaAcademicoMVC.Models.Participacion>
+<!-- Tabla de participaciones -->
+<table>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Asistió</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Fecha.ToShortDateString()</td>
+                <td>@p.Descripcion</td>
+                <td>@(p.Asistio ? "Presente" : "Ausente")</td>
+                <td>
+                    <!-- Botón para editar (puedes implementar modal si quieres) -->
+                    <a href="@Url.Action("EditarParticipacion", "Evaluacion", new { id = p.Id })">Editar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Botón para agregar nueva participación -->
+<a href="@Url.Action("CrearParticipacion", "Evaluacion", new { matriculaId = Model.FirstOrDefault()?.MatriculaId })">Agregar Participación</a>

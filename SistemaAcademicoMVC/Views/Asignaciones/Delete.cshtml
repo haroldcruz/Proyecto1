@@ -1,0 +1,24 @@
+﻿@model SistemaAcademicoMVC.Models.Tarea
+@{
+    ViewBag.Title = "Eliminar Tarea";
+}
+
+<h2>¿Eliminar Tarea?</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Curso</dt>
+        <dd>@(Model.Matricula?.Curso?.Nombre ?? "-")</dd>
+        <dt>Descripción</dt>
+        <dd>@Model.Descripcion</dd>
+        <dt>Fecha Entrega</dt>
+        <dd>@Model.FechaEntrega.ToString("yyyy-MM-dd")</dd>
+        <dt>Ponderación</dt>
+        <dd>@Model.PorcentajePonderacion %</dd>
+    </dl>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+}

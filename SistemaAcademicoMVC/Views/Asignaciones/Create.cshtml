@@ -1,0 +1,28 @@
+﻿@model SistemaAcademicoMVC.Models.Tarea
+@{
+    ViewBag.Title = "Crear Tarea";
+}
+
+<h2>Crear Tarea</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(m => m.MatriculaId, "Curso")
+        @Html.DropDownList("MatriculaId", null, "Seleccione", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Descripcion)
+        @Html.TextBoxFor(m => m.Descripcion, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.FechaEntrega)
+        @Html.TextBoxFor(m => m.FechaEntrega, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PorcentajePonderacion)
+        @Html.TextBoxFor(m => m.PorcentajePonderacion, new { @class = "form-control", type = "number", step = "0.01", min = "0", max = "100" })
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+}

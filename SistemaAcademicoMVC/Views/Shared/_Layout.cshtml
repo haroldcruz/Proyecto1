@@ -61,8 +61,12 @@
                     <li>@Html.ActionLink("Estudiantes", "Index", "Estudiantes")</li>
                     <li>@Html.ActionLink("Editar Perfil", "EditarPerfil", "Docentes")</li>
                     <li>@Html.ActionLink("Cursos", "Index", "Cursos")</li>
-                    <li>@Html.ActionLink("Cuatrimestres", "Index", "Cuatrimestres")</li>
-                    @Html.ActionLink("Ir a administración de docentes", "Administrador", "Admin")
+                    <li>@Html.ActionLink("Estadísticas académicas", "Index", "Estadisticas")</li>
+                    <li>@Html.ActionLink("Asistencia", "Index", "Participacion")</li>
+                    <li>@Html.ActionLink("Asignaciones", "Index", "Asignaciones")</li>
+                    <li>
+                        <a href="@Url.Action("Administrador", "Admin")">Ver tablas de administración</a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (docenteNombre != null)

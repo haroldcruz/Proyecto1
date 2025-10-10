@@ -1,33 +1,167 @@
-﻿@model IEnumerable<SistemaAcademicoMVC.Models.Docente>
+﻿@model SistemaAcademicoMVC.Models.TablasAdminViewModel
 @{
-    ViewBag.Title = "Administración de Docentes (Pruebas)";
+    ViewBag.Title = "Administración de Tablas";
 }
+<form method="post" action="@Url.Action("Limpiar", "Admin")">
+    <button type="submit">Borrar todos los datos</button>
+</form>
 
-<h2>Administración de Docentes (Pruebas)</h2>
-<table border="1" cellpadding="5">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Intentos Fallidos</th>
-            <th>Bloqueado Hasta</th>
-            <th>Contraseña (Hash)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var d in Model)
+<!-- Docentes -->
+<h2>Docentes</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Docente).GetProperties())
         {
-            <tr>
-                <td>@d.Nombre</td>
-                <td>@d.Correo</td>
-                <td>@d.FailedLoginAttempts</td>
-                <td>
-                    @(d.LockoutEnd.HasValue && d.LockoutEnd.Value > DateTime.Now
-                                ? d.LockoutEnd.Value.ToString("yyyy-MM-dd HH:mm")
-                                : "No")
-                </td>
-                <td>@d.Password</td>
-            </tr>
+            <th>@prop.Name</th>
         }
-    </tbody>
+    </tr>
+    @foreach (var d in Model.Docentes)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Docente).GetProperties())
+            {
+                <td>@prop.GetValue(d, null)</td>
+            }
+        </tr>
+    }
+</table>
+
+<!-- Estudiantes -->
+<h2>Estudiantes</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Estudiante).GetProperties())
+        {
+            <th>@prop.Name</th>
+        }
+    </tr>
+    @foreach (var e in Model.Estudiantes)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Estudiante).GetProperties())
+            {
+                <td>@prop.GetValue(e, null)</td>
+            }
+        </tr>
+    }
+</table>
+
+<!-- Cursos -->
+<h2>Cursos</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Curso).GetProperties())
+        {
+            <th>@prop.Name</th>
+        }
+    </tr>
+    @foreach (var c in Model.Cursos)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Curso).GetProperties())
+            {
+                <td>@prop.GetValue(c, null)</td>
+            }
+        </tr>
+    }
+</table>
+
+<!-- Matriculas -->
+<h2>Matriculas</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Matricula).GetProperties())
+        {
+            <th>@prop.Name</th>
+        }
+    </tr>
+    @foreach (var m in Model.Matriculas)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Matricula).GetProperties())
+            {
+                <td>@prop.GetValue(m, null)</td>
+            }
+        </tr>
+    }
+</table>
+
+<!-- Cuatrimestres -->
+<h2>Cuatrimestres</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Cuatrimestre).GetProperties())
+        {
+            <th>@prop.Name</th>
+        }
+    </tr>
+    @foreach (var q in Model.Cuatrimestres)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Cuatrimestre).GetProperties())
+            {
+                <td>@prop.GetValue(q, null)</td>
+            }
+        </tr>
+    }
+</table>
+
+<!-- Evaluaciones -->
+<h2>Evaluaciones</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Evaluacion).GetProperties())
+        {
+            <th>@prop.Name</th>
+        }
+    </tr>
+    @foreach (var ev in Model.Evaluaciones)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Evaluacion).GetProperties())
+            {
+                <td>@prop.GetValue(ev, null)</td>
+            }
+        </tr>
+    }
+</table>
+
+<!-- Participaciones -->
+<h2>Participaciones</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Participacion).GetProperties())
+        {
+            <th>@prop.Name</th>
+        }
+    </tr>
+    @foreach (var p in Model.Participaciones)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Participacion).GetProperties())
+            {
+                <td>@prop.GetValue(p, null)</td>
+            }
+        </tr>
+    }
+</table>
+
+<!-- Tareas -->
+<h2>Tareas</h2>
+<table border="1">
+    <tr>
+        @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Tarea).GetProperties())
+        {
+            <th>@prop.Name</th>
+        }
+    </tr>
+    @foreach (var t in Model.Tareas)
+    {
+        <tr>
+            @foreach (var prop in typeof(SistemaAcademicoMVC.Models.Tarea).GetProperties())
+            {
+                <td>@prop.GetValue(t, null)</td>
+            }
+        </tr>
+    }
 </table>

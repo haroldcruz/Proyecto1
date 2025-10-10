@@ -90,3 +90,10 @@ C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\Siste
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.csproj.CopyComplete
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.dll
 C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.pdb
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.csprojAssemblyReference.cache
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\bin\PagedList.dll
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\bin\PagedList.Mvc.dll
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\bin\PagedList.xml
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\bin\PagedList.Mvc.xml
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AddPorcentajePonderacionToTarea.resources
+C:\Users\hcruz\Desktop\Repositorio\Proyecto1\SistemaAcademicoMVC\obj\Debug\SistemaAcademicoMVC.Migrations.AgregarNotaEnTarea.resources

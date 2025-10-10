@@ -171,7 +171,7 @@ namespace SistemaAcademicoMVC.Controllers
                     db.SaveChanges();
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { registro = "ok" });
             }
 
             // Recarga combos en caso de error
@@ -194,7 +194,7 @@ namespace SistemaAcademicoMVC.Controllers
 
             return View(estudiante);
         }
-
+        // GeT
         public ActionResult Edit(int? id)
         {
             if (Session["DocenteId"] == null)
@@ -206,6 +206,21 @@ namespace SistemaAcademicoMVC.Controllers
             Estudiante estudiante = db.Estudiantes.Find(id);
             if (estudiante == null)
                 return HttpNotFound();
+
+            // Cursos en los que el estudiante está matriculado
+            var cursosMatriculados = db.Matriculas
+                .Where(m => m.EstudianteId == estudiante.Id)
+                .Select(m => m.CursoId)
+                .ToList();
+
+            // Combo de cursos del docente logueado, seleccionando los ya asignados
+            string correoDocente = Session["DocenteCorreo"]?.ToString();
+            ViewBag.CursosSeleccionados = new MultiSelectList(
+                db.Cursos.Where(c => c.CorreoDocente == correoDocente).ToList(),
+                "Id",
+                "Nombre",
+                cursosMatriculados
+            );
 
             return View(estudiante);
         }

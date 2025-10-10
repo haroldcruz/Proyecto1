@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Estadísticas Académicas";
+    var cuatrimestres = ViewBag.Cuatrimestres as List<SistemaAcademicoMVC.Models.Cuatrimestre>;
+    var cursos = ViewBag.Cursos as List<SistemaAcademicoMVC.Models.Curso>;
+}
+
+<h2>Estadísticas Académicas</h2>
+
+<!-- Filtros para cuatrimestre y curso -->
+<div>
+    <select id="cuatrimestre" class="form-control">
+        @foreach (var cuatri in cuatrimestres)
+        {
+            <option value="@cuatri.Id">@cuatri.Año - @cuatri.Numero</option>
+        }
+    </select>
+    <select id="curso" class="form-control">
+        @foreach (var curso in cursos)
+        {
+            <option value="@curso.Id">@curso.Nombre</option>
+        }
+    </select>
+    <button id="btnFiltrar" class="btn btn-primary">Filtrar</button>
+</div>
+
+<!-- Indicadores -->
+<div id="indicadores" style="margin-top:20px;">
+    <div class="card">
+        <div class="card-body">
+            <strong>Total matriculados:</strong> <span id="total"></span><br />
+            <strong>% Participación:</strong> <span id="participacion"></span><br />
+            <strong>% Aprobados:</strong> <span id="aprobados"></span><br />
+            <strong>% Reprobados:</strong> <span id="reprobados"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Lienzo para gráfico -->
+<canvas id="grafico" width="400" height="200"></canvas>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+function cargarEstadisticas() {
+    var cuatrimestreId = $('#cuatrimestre').val();
+    var cursoId = $('#curso').val();
+    $.ajax({
+        type: 'POST',
+        url: '@Url.Action("ObtenerEstadisticas", "Estadisticas")',
+        data: { cuatrimestreId, cursoId },
+        success: function (data) {
+            // Actualiza indicadores
+            $('#total').text(data.total);
+            $('#participacion').text(data.porcentajeParticipacion.toFixed(2) + "%");
+            $('#aprobados').text(data.porcentajeAprobados.toFixed(2) + "%");
+            $('#reprobados').text(data.porcentajeReprobados.toFixed(2) + "%");
+
+            // Muestra gráfico
+            mostrarGrafico(data.porcentajeAprobados, data.porcentajeReprobados);
+        }
+    });
+}
+
+// Gráfico sencillo con Chart.js
+function mostrarGrafico(aprobados, reprobados) {
+    var ctx = document.getElementById('grafico').getContext('2d');
+    if(window.graficoChart) window.graficoChart.destroy();
+    window.graficoChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Aprobados', 'Reprobados'],
+            datasets: [{
+                data: [aprobados, reprobados],
+                backgroundColor: ['#4caf50','#f44336']
+            }]
+        }
+    });
+}
+
+// Evento filtro
+$('#btnFiltrar').click(cargarEstadisticas);
+
+// Carga inicial
+$(document).ready(cargarEstadisticas);
+    </script>
+}

@@ -5,7 +5,6 @@
 }
 
 <h2>Registrar Nuevo Estudiante</h2>
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -106,9 +105,8 @@
         </div>
     </div>
 }
-
     <script>
-        // Campos del formulario que se guardarán en localStorage
+        // Campos del formulario que se guardan en localStorage
         const campos = [
             "nombreEstudiante",
             "apellidosEstudiante",
@@ -120,56 +118,54 @@
             "correoEstudiante"
         ];
 
-        // Al cargar la página, rellenar los campos si hay datos guardados
+        // Al cargar, rellena campos si hay datos guardados
         window.onload = function () {
             campos.forEach(function (campo) {
-                if (localStorage.getItem(campo)) {
-                    document.getElementById(campo).value = localStorage.getItem(campo);
-                }
+                var elem = document.getElementById(campo);
+                if (elem && localStorage.getItem(campo)) elem.value = localStorage.getItem(campo);
             });
-            // Rellenar selección de cursos
-            if (localStorage.getItem("cursosEstudiante")) {
+            // Cursos múltiples
+            var selectCursos = document.getElementById("cursosEstudiante");
+            if (selectCursos && localStorage.getItem("cursosEstudiante")) {
                 var cursosSeleccionados = JSON.parse(localStorage.getItem("cursosEstudiante"));
-                var selectCursos = document.getElementById("cursosEstudiante");
                 for (var i = 0; i < selectCursos.options.length; i++) {
                     selectCursos.options[i].selected = cursosSeleccionados.includes(selectCursos.options[i].value);
                 }
             }
-            // Rellenar selección de cuatrimestre
-            if (localStorage.getItem("cuatrimestreEstudiante")) {
-                document.getElementById("CuatrimestreId").value = localStorage.getItem("cuatrimestreEstudiante");
+            // Cuatrimestre
+            var selectCuatrimestre = document.getElementById("CuatrimestreId");
+            if (selectCuatrimestre && localStorage.getItem("cuatrimestreEstudiante")) {
+                selectCuatrimestre.value = localStorage.getItem("cuatrimestreEstudiante");
             }
         };
 
-        // Guardar cada cambio en localStorage
+        // Guarda cambios en campos de texto
         campos.forEach(function (campo) {
-            document.getElementById(campo).addEventListener("input", function () {
-                localStorage.setItem(campo, this.value);
-            });
-        });
-
-        // Guardar selección de cursos en localStorage
-        document.getElementById("cursosEstudiante").addEventListener("change", function () {
-            var seleccionados = Array.from(this.selectedOptions).map(opt => opt.value);
-            localStorage.setItem("cursosEstudiante", JSON.stringify(seleccionados));
-        });
-
-        // Guardar selección de cuatrimestre en localStorage
-        document.getElementById("CuatrimestreId").addEventListener("change", function () {
-            localStorage.setItem("cuatrimestreEstudiante", this.value);
-        });
-
-        // Solo limpiar localStorage si el registro fue exitoso (redirección)
-        window.addEventListener("beforeunload", function () {
-            if (window.location.pathname.endsWith("/Estudiantes/Index")) {
-                // Limpiar datos luego de registrar correctamente
-                campos.concat(["cursosEstudiante", "cuatrimestreEstudiante"]).forEach(function (campo) {
-                    localStorage.removeItem(campo);
+            var elem = document.getElementById(campo);
+            if (elem) {
+                elem.addEventListener("input", function () {
+                    localStorage.setItem(campo, this.value);
                 });
             }
         });
-    </script>
 
+        // Guarda selección de cursos
+        var selectCursos = document.getElementById("cursosEstudiante");
+        if (selectCursos) {
+            selectCursos.addEventListener("change", function () {
+                var seleccionados = Array.from(this.selectedOptions).map(opt => opt.value);
+                localStorage.setItem("cursosEstudiante", JSON.stringify(seleccionados));
+            });
+        }
+
+        // Guarda selección de cuatrimestre
+        var selectCuatrimestre = document.getElementById("CuatrimestreId");
+        if (selectCuatrimestre) {
+            selectCuatrimestre.addEventListener("change", function () {
+                localStorage.setItem("cuatrimestreEstudiante", this.value);
+            });
+        }
+    </script>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

@@ -53,6 +53,12 @@
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -129,11 +135,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AsignacionesController.cs" />
     <Compile Include="Controllers\CursosController.cs" />
     <Compile Include="Controllers\DocentesController.cs" />
+    <Compile Include="Controllers\EstadisticasController.cs" />
     <Compile Include="Controllers\EstudiantesController.cs" />
     <Compile Include="Controllers\EvaluacionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ParticipacionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -157,6 +166,14 @@
     <Compile Include="Migrations\202510060202070_evaluacion.designer.cs">
       <DependentUpon>202510060202070_evaluacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202510092353430_AddPorcentajePonderacionToTarea.cs" />
+    <Compile Include="Migrations\202510092353430_AddPorcentajePonderacionToTarea.designer.cs">
+      <DependentUpon>202510092353430_AddPorcentajePonderacionToTarea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202510100059405_AgregarNotaEnTarea.cs" />
+    <Compile Include="Migrations\202510100059405_AgregarNotaEnTarea.designer.cs">
+      <DependentUpon>202510100059405_AgregarNotaEnTarea.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Curso.cs" />
     <Compile Include="Models\CursoPorCuatrimestre.cs" />
@@ -169,6 +186,7 @@
     <Compile Include="Models\Matricula.cs" />
     <Compile Include="Models\Participacion.cs" />
     <Compile Include="Models\SistemaAcademicoMVCContext.cs" />
+    <Compile Include="Models\TablasAdminViewModel.cs" />
     <Compile Include="Models\Tarea.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\CaptchaHelper.cs" />
@@ -180,6 +198,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -224,10 +243,27 @@
     <Content Include="Views\Cursos\Index.cshtml" />
     <Content Include="Views\Cursos\Edit.cshtml" />
     <Content Include="Views\Cursos\Delete.cshtml" />
-    <Content Include="Views\Admin\Administrador.cshtml" />
     <Content Include="Views\Evaluacion\Calificar.cshtml" />
+    <Content Include="Views\Estadisticas\index.cshtml" />
+    <Content Include="Views\Admin\Administrador.cshtml" />
+    <Content Include="Views\Participacion\Create.cshtml" />
+    <Content Include="Views\Participacion\Index.cshtml" />
+    <Content Include="Views\Asignaciones\Index.cshtml" />
+    <Content Include="Views\Asignaciones\Create.cshtml" />
+    <Content Include="Views\Asignaciones\Edit.cshtml" />
+    <Content Include="Views\Asignaciones\Details.cshtml" />
+    <Content Include="Views\Asignaciones\Delete.cshtml" />
+    <Content Include="Views\Evaluacion\_ParticipacionPartial.cshtml" />
+    <Content Include="Views\Evaluacion\_AsignacionesPartial.cshtml" />
+    <Content Include="Views\Evaluacion\_NotaFinalPartial.cshtml" />
+    <Content Include="Views\Evaluacion\EditarTarea.cshtml" />
+    <Content Include="Views\Evaluacion\GenerarNotaFinal.cshtml" />
+    <Content Include="Views\Evaluacion\EditarParticipacion.cshtml" />
+    <Content Include="Views\Evaluacion\CrearParticipacion.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Maricula\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -256,6 +292,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202510060202070_evaluacion.resx">
       <DependentUpon>202510060202070_evaluacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510092353430_AddPorcentajePonderacionToTarea.resx">
+      <DependentUpon>202510092353430_AddPorcentajePonderacionToTarea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510100059405_AgregarNotaEnTarea.resx">
+      <DependentUpon>202510100059405_AgregarNotaEnTarea.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
